@@ -1,0 +1,11 @@
+{
+  "statuses": ["PENDING", "CONFIRMED", "ASSIGNED", "IN_PROGRESS", "COMPLETED", "CANCELLED"],
+  "transitions": {
+    "PENDING": ["CONFIRMED", "CANCELLED"],
+    "CONFIRMED": ["ASSIGNED", "CANCELLED"],
+    "ASSIGNED": ["IN_PROGRESS", "CANCELLED"],
+    "IN_PROGRESS": ["COMPLETED"],
+    "COMPLETED": [],
+    "CANCELLED": []
+  }
+}

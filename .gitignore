@@ -1,0 +1,18 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.iml
+*.log
+
+# Secrets and local env: NEVER commit
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.jks
+*.keystore
+google-services.json
+GoogleService-Info.plist
