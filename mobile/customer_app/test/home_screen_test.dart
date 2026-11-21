@@ -1,10 +1,11 @@
-import 'package:customer_app/app/app.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:customer_app/app/app_theme.dart';
+import 'package:customer_app/features/home/presentation/home_screen.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   testWidgets('shows welcome content and service cards', (tester) async {
-    await tester.pumpWidget(const ProviderScope(child: CustomerApp()));
+    await tester.pumpWidget(MaterialApp(theme: AppTheme.light(), home: const HomeScreen()));
 
     expect(find.text('HerCare'), findsOneWidget);
     expect(find.text('Welcome to HerCare'), findsOneWidget);
@@ -18,7 +19,7 @@ void main() {
   });
 
   testWidgets('Explore Services shows the coming soon SnackBar', (tester) async {
-    await tester.pumpWidget(const ProviderScope(child: CustomerApp()));
+    await tester.pumpWidget(MaterialApp(theme: AppTheme.light(), home: const HomeScreen()));
 
     final button = find.text('Explore Services');
     await tester.ensureVisible(button);

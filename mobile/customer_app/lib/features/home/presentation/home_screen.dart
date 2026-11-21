@@ -36,7 +36,11 @@ class HomeScreen extends StatelessWidget {
                     const CircleAvatar(
                       radius: 18,
                       backgroundColor: AppColors.lavender,
-                      child: Icon(Icons.favorite, size: 18, color: Colors.white),
+                      child: Icon(
+                        Icons.favorite,
+                        size: 18,
+                        color: Colors.white,
+                      ),
                     ),
                     const SizedBox(width: 10),
                     Text(
@@ -51,8 +55,9 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(height: 32),
                 Text(
                   'Welcome to HerCare',
-                  style: textTheme.headlineMedium
-                      ?.copyWith(fontWeight: FontWeight.w800),
+                  style: textTheme.headlineMedium?.copyWith(
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Text(

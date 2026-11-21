@@ -10,25 +10,26 @@ abstract final class AppColors {
 
 abstract final class AppTheme {
   static ThemeData light() {
-    final scheme = ColorScheme.fromSeed(
-      seedColor: AppColors.lavender,
-      brightness: Brightness.light,
-    ).copyWith(
-      primary: AppColors.lavender,
-      onPrimary: Colors.white,
-      secondary: AppColors.softRose,
-      surface: Colors.white,
-      onSurface: AppColors.deepPlum,
-    );
+    final scheme =
+        ColorScheme.fromSeed(
+          seedColor: AppColors.lavender,
+          brightness: Brightness.light,
+        ).copyWith(
+          primary: AppColors.lavender,
+          onPrimary: Colors.white,
+          secondary: AppColors.softRose,
+          surface: Colors.white,
+          onSurface: AppColors.deepPlum,
+        );
 
     return ThemeData(
       useMaterial3: true,
       colorScheme: scheme,
       scaffoldBackgroundColor: AppColors.background,
       textTheme: Typography.material2021().black.apply(
-            bodyColor: AppColors.deepPlum,
-            displayColor: AppColors.deepPlum,
-          ),
+        bodyColor: AppColors.deepPlum,
+        displayColor: AppColors.deepPlum,
+      ),
       cardTheme: CardThemeData(
         color: Colors.white,
         elevation: 0,
