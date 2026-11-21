@@ -1,22 +1,9 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'screens/home_screen.dart';
-import 'theme/app_theme.dart';
+import 'app/app.dart';
 
 void main() {
-  runApp(const CustomerApp());
-}
-
-class CustomerApp extends StatelessWidget {
-  const CustomerApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'HerCare',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.light(),
-      home: const HomeScreen(),
-    );
-  }
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const ProviderScope(child: CustomerApp()));
 }

@@ -8,9 +8,12 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        app: [customer_app, worker_app]
     defaults:
       run:
-        working-directory: mobile
+        working-directory: mobile/${{ matrix.app }}
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2

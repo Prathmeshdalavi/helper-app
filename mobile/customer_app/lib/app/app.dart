@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'app_theme.dart';
 import 'router/app_router.dart';
-import 'theme/app_theme.dart';
 
-class HerCareApp extends ConsumerWidget {
-  const HerCareApp({super.key});
+class CustomerApp extends ConsumerWidget {
+  const CustomerApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

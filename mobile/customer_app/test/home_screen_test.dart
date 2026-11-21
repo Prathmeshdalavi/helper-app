@@ -1,9 +1,10 @@
-import 'package:customer_app/main.dart';
+import 'package:customer_app/app/app.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   testWidgets('shows welcome content and service cards', (tester) async {
-    await tester.pumpWidget(const CustomerApp());
+    await tester.pumpWidget(const ProviderScope(child: CustomerApp()));
 
     expect(find.text('HerCare'), findsOneWidget);
     expect(find.text('Welcome to HerCare'), findsOneWidget);
@@ -17,7 +18,7 @@ void main() {
   });
 
   testWidgets('Explore Services shows the coming soon SnackBar', (tester) async {
-    await tester.pumpWidget(const CustomerApp());
+    await tester.pumpWidget(const ProviderScope(child: CustomerApp()));
 
     final button = find.text('Explore Services');
     await tester.ensureVisible(button);

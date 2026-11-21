@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
-import '../theme/app_theme.dart';
+import '../../../app/app_theme.dart';
 
 /// A simple tappable card: tinted icon, title, chevron.
 class FeatureCard extends StatelessWidget {

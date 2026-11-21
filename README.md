@@ -1,11 +1,12 @@
 # HerCare: home helper services platform
 
-Monorepo: one repository, four deployable parts.
+Monorepo: one repository, deployable parts.
 
 | Folder | What | Stack |
 |---|---|---|
 | `backend/` | REST API, auth, bookings, payments, notifications | Spring Boot 4.1, Java 21, Maven |
-| `mobile/` | Customer app, Android and iOS | Flutter, Riverpod, go_router, Dio |
+| `mobile/customer_app/` | Customer app, Android and iOS | Flutter, Riverpod, go_router, Dio |
+| `mobile/worker_app/` | Worker app, Android and iOS | Flutter |
 | `admin-web/` | Admin dashboard | React, TypeScript, Vite |
 | `database/` | Local DB init, seeds, data-model docs (schema = Flyway in `backend/`) | PostgreSQL 16 |
 | `shared/` | Cross-app contracts and env documentation | JSON, Markdown |
@@ -18,7 +19,7 @@ cp .env.example .env
 docker compose up -d                       # Postgres + Redis
 
 cd backend && ./mvnw spring-boot:run       # http://localhost:8080/api/v1/system/ping
-cd mobile && flutter run --dart-define-from-file=env/dev.json
+cd mobile/customer_app && flutter run --dart-define-from-file=env/dev.json
 cd admin-web && npm install && npm run dev # http://localhost:5173
 ```
 

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// HerCare brand colors. Use these instead of hard-coding hex values.
 abstract final class AppColors {

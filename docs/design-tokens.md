@@ -11,5 +11,5 @@
 | Text secondary | `#675D70` |
 | Border | `#EAE5EF` |
 
-Implemented in `mobile/lib/app/theme/app_theme.dart` and `admin-web/src/styles/global.css`.
+Implemented in `mobile/customer_app/lib/app/app_theme.dart` and `admin-web/src/styles/global.css`.
 Soft Rose has low contrast with white text; use it for fills and accents only.
