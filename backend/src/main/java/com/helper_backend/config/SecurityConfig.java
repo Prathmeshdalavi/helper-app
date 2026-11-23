@@ -25,18 +25,30 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
 	@Bean
-	SecurityFilterChain apiSecurity(HttpSecurity http) throws Exception {
+	SecurityFilterChain apiSecurity(HttpSecurity http, JsonSecurityHandlers handlers) throws Exception {
 		http
 			.csrf(AbstractHttpConfigurer::disable)
 			.cors(Customizer.withDefaults())
 			.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.authorizeHttpRequests(auth -> auth
 				.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-				.requestMatchers("/api/v1/auth/**", "/api/v1/system/ping").permitAll()
+				// Pre-login auth steps. Logout is NOT listed: it requires a valid access token.
+				.requestMatchers(HttpMethod.POST,
+					"/api/v1/auth/check-phone",
+					"/api/v1/auth/send-otp",
+					"/api/v1/auth/verify-otp",
+					"/api/v1/auth/refresh").permitAll()
+				.requestMatchers(HttpMethod.GET, "/api/v1/system/ping").permitAll()
 				.requestMatchers("/actuator/health/**", "/actuator/info").permitAll()
 				.requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
 				.anyRequest().authenticated())
-			.oauth2ResourceServer(oauth -> oauth.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter())));
+			.exceptionHandling(e -> e
+				.authenticationEntryPoint(handlers)
+				.accessDeniedHandler(handlers))
+			.oauth2ResourceServer(oauth -> oauth
+				.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter()))
+				.authenticationEntryPoint(handlers)
+				.accessDeniedHandler(handlers));
 		return http.build();
 	}
 

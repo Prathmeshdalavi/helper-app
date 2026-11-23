@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.JwtValidators;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 
@@ -35,8 +36,12 @@ public class JwtConfig {
 	}
 
 	@Bean
-	JwtDecoder jwtDecoder(SecretKey jwtSecretKey) {
-		return NimbusJwtDecoder.withSecretKey(jwtSecretKey).macAlgorithm(MacAlgorithm.HS256).build();
+	JwtDecoder jwtDecoder(SecretKey jwtSecretKey, AppProperties props) {
+		NimbusJwtDecoder decoder = NimbusJwtDecoder.withSecretKey(jwtSecretKey)
+				.macAlgorithm(MacAlgorithm.HS256).build();
+		// Validates expiry and that the token was issued by this service.
+		decoder.setJwtValidator(JwtValidators.createDefaultWithIssuer(props.jwt().issuer()));
+		return decoder;
 	}
 
 	@Bean
