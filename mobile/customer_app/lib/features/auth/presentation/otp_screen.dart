@@ -6,22 +6,28 @@ import 'package:material_ui/material_ui.dart';
 
 import '../../../app/app_theme.dart';
 import '../../../app/router/routes.dart';
+import '../domain/auth_args.dart';
+import 'widgets/auth_backdrop.dart';
 import 'widgets/brand_wordmark.dart';
 
 const _otpLength = 4;
 const _resendSeconds = 15;
 
 class OtpScreen extends StatefulWidget {
-  const OtpScreen({super.key, required this.phone});
+  const OtpScreen({super.key, required this.args});
 
-  /// 10 digit number without the country code.
-  final String phone;
+  final AuthArgs args;
 
   @override
   State<OtpScreen> createState() => _OtpScreenState();
 }
 
-class _OtpScreenState extends State<OtpScreen> {
+class _OtpScreenState extends State<OtpScreen>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _halo = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 2800),
+  )..repeat();
   final _controller = TextEditingController();
   final _focus = FocusNode();
   Timer? _timer;
@@ -30,7 +36,7 @@ class _OtpScreenState extends State<OtpScreen> {
   String? _error;
 
   String get _pretty =>
-      '+91 ${widget.phone.substring(0, 5)} ${widget.phone.substring(5)}';
+      '+91 ${widget.args.phone.substring(0, 5)} ${widget.args.phone.substring(5)}';
 
   @override
   void initState() {
@@ -72,7 +78,7 @@ class _OtpScreenState extends State<OtpScreen> {
       _focus.requestFocus();
       return;
     }
-    context.go(Routes.success);
+    context.go(Routes.success, extra: widget.args);
   }
 
   void _resend() {
@@ -85,6 +91,7 @@ class _OtpScreenState extends State<OtpScreen> {
   @override
   void dispose() {
     _timer?.cancel();
+    _halo.dispose();
     _controller.dispose();
     _focus.dispose();
     super.dispose();
@@ -95,155 +102,150 @@ class _OtpScreenState extends State<OtpScreen> {
     final text = _controller.text;
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-              child: Row(
-                children: [
-                  IconButton(
-                    onPressed: () => context.pop(),
-                    icon: const Icon(Icons.arrow_back, size: 22),
-                  ),
-                  const Expanded(child: Center(child: BrandWordmark(size: 22))),
-                  const SizedBox(width: 48),
-                ],
-              ),
-            ),
-            const SizedBox(height: 56),
-            Container(
-              width: 64,
-              height: 64,
-              decoration: BoxDecoration(
-                color: AppColors.lavender.withValues(alpha: 0.12),
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.lock_rounded,
-                size: 30,
-                color: AppColors.lavender,
-              ),
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              'Enter OTP',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
-            ),
-            const SizedBox(height: 14),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Sent to $_pretty',
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xFF6B6577),
-                  ),
+      body: AuthBackdrop(
+        child: SafeArea(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                child: Row(
+                  children: [
+                    IconButton(
+                      onPressed: () => context.pop(),
+                      icon: const Icon(Icons.arrow_back, size: 22),
+                    ),
+                    const Expanded(
+                      child: Center(child: BrandWordmark(size: 22)),
+                    ),
+                    const SizedBox(width: 48),
+                  ],
                 ),
-                const SizedBox(width: 6),
-                GestureDetector(
-                  onTap: () => context.pop(),
-                  child: const Icon(
-                    Icons.edit_outlined,
-                    size: 15,
-                    color: AppColors.lavender,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 28),
-            GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: () => _focus.requestFocus(),
-              child: Stack(
-                alignment: Alignment.center,
+              ),
+              const SizedBox(height: 48),
+              _LockBadge(animation: _halo),
+              const SizedBox(height: 20),
+              const Text(
+                'Enter OTP',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700),
+              ),
+              const SizedBox(height: 14),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Hidden field that actually receives the keystrokes.
-                  Opacity(
-                    opacity: 0,
-                    child: SizedBox(
-                      width: 1,
-                      height: 1,
-                      child: TextField(
-                        controller: _controller,
-                        focusNode: _focus,
-                        autofocus: true,
-                        keyboardType: TextInputType.number,
-                        enableInteractiveSelection: false,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                          LengthLimitingTextInputFormatter(_otpLength),
-                        ],
-                      ),
+                  Text(
+                    'Sent to $_pretty',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xFF6B6577),
                     ),
                   ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      for (var i = 0; i < _otpLength; i++) ...[
-                        if (i > 0) const SizedBox(width: 10),
-                        _OtpBox(
-                          char: i < text.length ? text[i] : null,
-                          active:
-                              i == text.length.clamp(0, _otpLength - 1) &&
-                              !_verifying,
-                          error: _error != null,
-                        ),
-                      ],
-                    ],
+                  const SizedBox(width: 6),
+                  GestureDetector(
+                    onTap: () => context.pop(),
+                    child: const Icon(
+                      Icons.edit_outlined,
+                      size: 15,
+                      color: AppColors.lavender,
+                    ),
                   ),
                 ],
               ),
-            ),
-            const SizedBox(height: 26),
-            if (_verifying)
-              const SizedBox(
-                width: 22,
-                height: 22,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2.4,
-                  color: AppColors.lavender,
-                ),
-              )
-            else if (_error != null)
-              Text(
-                _error!,
-                style: const TextStyle(color: Color(0xFFD64560), fontSize: 13),
-              )
-            else if (_remaining > 0)
-              Text.rich(
-                TextSpan(
-                  style: const TextStyle(
-                    fontSize: 13,
-                    color: Color(0xFF9A94A5),
-                  ),
+              const SizedBox(height: 28),
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () => _focus.requestFocus(),
+                child: Stack(
+                  alignment: Alignment.center,
                   children: [
-                    const TextSpan(text: 'Resend available in  '),
-                    TextSpan(
-                      text: '$_remaining s',
-                      style: const TextStyle(
-                        color: AppColors.deepPlum,
-                        fontWeight: FontWeight.w700,
+                    // Hidden field that actually receives the keystrokes.
+                    Opacity(
+                      opacity: 0,
+                      child: SizedBox(
+                        width: 1,
+                        height: 1,
+                        child: TextField(
+                          controller: _controller,
+                          focusNode: _focus,
+                          autofocus: true,
+                          keyboardType: TextInputType.number,
+                          enableInteractiveSelection: false,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            LengthLimitingTextInputFormatter(_otpLength),
+                          ],
+                        ),
                       ),
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        for (var i = 0; i < _otpLength; i++) ...[
+                          if (i > 0) const SizedBox(width: 10),
+                          _OtpBox(
+                            char: i < text.length ? text[i] : null,
+                            active:
+                                i == text.length.clamp(0, _otpLength - 1) &&
+                                !_verifying,
+                            error: _error != null,
+                          ),
+                        ],
+                      ],
                     ),
                   ],
                 ),
-              )
-            else
-              GestureDetector(
-                onTap: _resend,
-                child: const Text(
-                  'Resend OTP',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
+              ),
+              const SizedBox(height: 26),
+              if (_verifying)
+                const SizedBox(
+                  width: 22,
+                  height: 22,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2.4,
                     color: AppColors.lavender,
                   ),
+                )
+              else if (_error != null)
+                Text(
+                  _error!,
+                  style: const TextStyle(
+                    color: Color(0xFFD64560),
+                    fontSize: 13,
+                  ),
+                )
+              else if (_remaining > 0)
+                Text.rich(
+                  TextSpan(
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: Color(0xFF9A94A5),
+                    ),
+                    children: [
+                      const TextSpan(text: 'Resend available in  '),
+                      TextSpan(
+                        text: '$_remaining s',
+                        style: const TextStyle(
+                          color: AppColors.deepPlum,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              else
+                GestureDetector(
+                  onTap: _resend,
+                  child: const Text(
+                    'Resend OTP',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.lavender,
+                    ),
+                  ),
                 ),
-              ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -263,30 +265,109 @@ class _OtpBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final borderColor = error
-        ? const Color(0xFFD64560)
-        : active
-        ? AppColors.lavender
-        : const Color(0xFFEAE6F0);
-    return Container(
-      width: 50,
-      height: 66,
+    const red = Color(0xFFD64560);
+    final accent = error ? red : AppColors.lavender;
+    final filled = char != null;
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 160),
+      curve: Curves.easeOut,
+      width: 54,
+      height: 68,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: active ? Colors.white : const Color(0xFFFAF9FC),
-        borderRadius: BorderRadius.circular(12),
+        color: filled ? const Color(0xFFF8F4FF) : Colors.white,
+        borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: borderColor,
-          width: active || error ? 1.5 : 1,
+          color: active || error
+              ? accent
+              : filled
+              ? AppColors.lavender.withValues(alpha: 0.35)
+              : const Color(0xFFE6E0F0),
+          width: active || error ? 1.8 : 1.2,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: (active || error ? accent : const Color(0xFF8064C8))
+                .withValues(alpha: active || error ? 0.22 : 0.07),
+            blurRadius: active || error ? 14 : 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Text(
         char ?? '•',
         style: TextStyle(
-          fontSize: char == null ? 20 : 26,
-          fontWeight: FontWeight.w600,
-          color: char == null ? const Color(0xFF9A94A5) : AppColors.deepPlum,
+          fontSize: filled ? 28 : 20,
+          fontWeight: FontWeight.w700,
+          color: filled ? AppColors.deepPlum : const Color(0xFFB4AEC2),
         ),
+      ),
+    );
+  }
+}
+
+/// Lock icon with two slow, soft rings radiating outward.
+class _LockBadge extends StatelessWidget {
+  const _LockBadge({required this.animation});
+
+  final Animation<double> animation;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 120,
+      height: 120,
+      child: AnimatedBuilder(
+        animation: animation,
+        builder: (context, _) {
+          Widget ring(double phase) {
+            final t = (animation.value + phase) % 1;
+            return Transform.scale(
+              scale: 0.62 + t * 0.38,
+              child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: AppColors.lavender.withValues(alpha: 0.28 * (1 - t)),
+                    width: 1.5,
+                  ),
+                ),
+              ),
+            );
+          }
+
+          return Stack(
+            alignment: Alignment.center,
+            children: [
+              ring(0),
+              ring(0.5),
+              Container(
+                width: 68,
+                height: 68,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: const LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [Color(0xFFB39BEE), AppColors.lavender],
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.lavender.withValues(alpha: 0.35),
+                      blurRadius: 18,
+                      offset: const Offset(0, 8),
+                    ),
+                  ],
+                ),
+                child: const Icon(
+                  Icons.lock_rounded,
+                  size: 30,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

@@ -1,8 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/auth/domain/auth_args.dart';
 import '../../features/auth/presentation/login_screen.dart';
 import '../../features/auth/presentation/otp_screen.dart';
+import '../../features/auth/presentation/signup_screen.dart';
 import '../../features/auth/presentation/splash_screen.dart';
 import '../../features/auth/presentation/success_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
@@ -23,13 +25,21 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const LoginScreen(),
       ),
       GoRoute(
+        path: Routes.signup,
+        builder: (context, state) => SignupScreen(
+          args: state.extra as AuthArgs? ?? const AuthArgs(phone: '0000000000'),
+        ),
+      ),
+      GoRoute(
         path: Routes.otp,
-        builder: (context, state) =>
-            OtpScreen(phone: state.extra as String? ?? '0000000000'),
+        builder: (context, state) => OtpScreen(
+          args: state.extra as AuthArgs? ?? const AuthArgs(phone: '0000000000'),
+        ),
       ),
       GoRoute(
         path: Routes.success,
-        builder: (context, state) => const SuccessScreen(),
+        builder: (context, state) =>
+            SuccessScreen(args: state.extra as AuthArgs?),
       ),
       GoRoute(
         path: Routes.home,

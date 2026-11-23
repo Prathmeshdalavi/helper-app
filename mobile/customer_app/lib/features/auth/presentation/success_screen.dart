@@ -5,10 +5,13 @@ import 'package:material_ui/material_ui.dart';
 
 import '../../../app/app_theme.dart';
 import '../../../app/router/routes.dart';
+import '../domain/auth_args.dart';
 
 /// Shown right after OTP verification, then moves on to home.
 class SuccessScreen extends StatefulWidget {
-  const SuccessScreen({super.key});
+  const SuccessScreen({super.key, this.args});
+
+  final AuthArgs? args;
 
   @override
   State<SuccessScreen> createState() => _SuccessScreenState();
@@ -84,18 +87,24 @@ class _SuccessScreenState extends State<SuccessScreen> {
                 color: AppColors.deepPlum.withValues(alpha: 0.08),
               ),
               const SizedBox(height: 20),
-              const Row(
+              Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.location_on_rounded,
                     size: 20,
                     color: AppColors.softRose,
                   ),
-                  SizedBox(width: 6),
+                  const SizedBox(width: 6),
                   Text(
-                    'Welcome to HerCare',
-                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.w700),
+                    widget.args?.isNewUser == true &&
+                            widget.args!.firstName.isNotEmpty
+                        ? 'Welcome to HerCare, ${widget.args!.firstName}'
+                        : 'Welcome to HerCare',
+                    style: const TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ],
               ),

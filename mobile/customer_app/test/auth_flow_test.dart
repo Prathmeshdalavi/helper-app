@@ -17,17 +17,24 @@ Future<void> _toLogin(WidgetTester tester) async {
   await _pumpFor(tester, 2400);
 }
 
-Future<void> _toOtp(WidgetTester tester) async {
+/// Demo number the mock repository treats as already registered.
+const _existing = '9876543210';
+const _newNumber = '7796693451';
+
+Future<void> _submitPhone(WidgetTester tester, String phone) async {
   await _toLogin(tester);
-  await tester.enterText(find.byType(EditableText), '7796693451');
+  await tester.enterText(find.byType(EditableText), phone);
   await tester.pump();
   await tester.tap(find.text('Proceed'));
-  await _pumpFor(tester, 800);
+  await _pumpFor(tester, 1300); // mock lookup + route transition
 }
 
+Future<void> _toOtp(WidgetTester tester) => _submitPhone(tester, _existing);
+
 void main() {
-  testWidgets('Proceed stays disabled until 10 digits are entered',
-      (tester) async {
+  testWidgets('Proceed stays disabled until 10 digits are entered', (
+    tester,
+  ) async {
     await _toLogin(tester);
     expect(find.text('Trusted Home Helpers'), findsOneWidget);
 
@@ -68,7 +75,7 @@ void main() {
   testWidgets('phone -> OTP -> success -> home', (tester) async {
     await _toOtp(tester);
     expect(find.text('Enter OTP'), findsOneWidget);
-    expect(find.text('Sent to +91 77966 93451'), findsOneWidget);
+    expect(find.text('Sent to +91 98765 43210'), findsOneWidget);
 
     await tester.enterText(find.byType(EditableText), '1234');
     await _pumpFor(tester, 1500);
@@ -76,6 +83,57 @@ void main() {
 
     await _pumpFor(tester, 3200);
     expect(find.text('Welcome to HerCare'), findsOneWidget);
+  });
+
+  testWidgets('registered number skips sign up and goes to OTP', (
+    tester,
+  ) async {
+    await _submitPhone(tester, _existing);
+    expect(find.text('Create your account'), findsNothing);
+    expect(find.text('Enter OTP'), findsOneWidget);
+  });
+
+  testWidgets('new number -> sign up -> OTP -> welcome by name', (
+    tester,
+  ) async {
+    await _submitPhone(tester, _newNumber);
+    expect(find.text('Create your account'), findsOneWidget);
+    expect(find.text('+91 77966 93451'), findsOneWidget);
+
+    FilledButton continueButton() =>
+        tester.widget<FilledButton>(find.byType(FilledButton));
+    expect(continueButton().onPressed, isNull);
+
+    await tester.enterText(find.byType(TextField).at(0), 'Priya Sharma');
+    await tester.pump();
+    expect(continueButton().onPressed, isNull); // terms not accepted yet
+
+    final terms = find.byKey(const ValueKey('terms-checkbox'));
+    await tester.ensureVisible(terms);
+    await tester.pump();
+    await tester.tap(terms);
+    await tester.pump();
+    expect(continueButton().onPressed, isNotNull);
+
+    // A malformed email blocks Continue; clearing it is fine (optional).
+    await tester.enterText(find.byType(TextField).at(1), 'nope');
+    await tester.pump();
+    expect(find.text('Enter a valid email address'), findsOneWidget);
+    expect(continueButton().onPressed, isNull);
+    await tester.enterText(find.byType(TextField).at(1), 'priya@example.com');
+    await tester.pump();
+    expect(continueButton().onPressed, isNotNull);
+
+    await tester.tap(find.text('Continue'));
+    await _pumpFor(tester, 800);
+    expect(find.text('Enter OTP'), findsOneWidget);
+    expect(find.text('Sent to +91 77966 93451'), findsOneWidget);
+
+    await tester.enterText(find.byType(EditableText), '1234');
+    await _pumpFor(tester, 1500);
+    expect(find.text("You're all set!"), findsOneWidget);
+    await _pumpFor(tester, 100);
+    expect(find.text('Welcome to HerCare, Priya'), findsOneWidget);
   });
 
   testWidgets('wrong OTP shows an error', (tester) async {

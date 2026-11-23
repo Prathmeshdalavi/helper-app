@@ -1,24 +1,29 @@
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../../app/app_theme.dart';
 import '../../../app/router/routes.dart';
+import '../data/auth_repository.dart';
+import '../domain/auth_args.dart';
 import 'widgets/brand_wordmark.dart';
 import 'widgets/hero_carousel.dart';
 
 /// Phone-number entry. One screen serves both login and sign up: the backend
 /// decides which it is after the OTP is verified.
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _controller = TextEditingController();
   final _focus = FocusNode();
+
+  bool _loading = false;
 
   bool get _valid => _controller.text.length == 10;
 
@@ -35,10 +40,25 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  void _proceed() {
-    if (!_valid) return;
+  Future<void> _proceed() async {
+    if (!_valid || _loading) return;
     FocusScope.of(context).unfocus();
-    context.push(Routes.otp, extra: _controller.text);
+    final phone = _controller.text;
+    setState(() => _loading = true);
+    final registered = await ref
+        .read(authRepositoryProvider)
+        .isRegistered(phone);
+    if (!mounted) return;
+    setState(() => _loading = false);
+    // Existing users verify with OTP; new users create an account first.
+    if (registered) {
+      context.push(Routes.otp, extra: AuthArgs(phone: phone));
+    } else {
+      context.push(
+        Routes.signup,
+        extra: AuthArgs(phone: phone, isNewUser: true),
+      );
+    }
   }
 
   @override
@@ -83,7 +103,16 @@ class _LoginScreenState extends State<LoginScreen> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: const Text('Proceed'),
+                    child: _loading
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2.2,
+                              color: Colors.white,
+                            ),
+                          )
+                        : const Text('Proceed'),
                   ),
                 ),
               ],
