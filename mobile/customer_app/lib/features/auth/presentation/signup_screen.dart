@@ -5,8 +5,10 @@ import 'package:material_ui/material_ui.dart';
 import '../../../app/app_theme.dart';
 import '../../../app/router/routes.dart';
 import '../domain/auth_args.dart';
+import 'widgets/auth_backdrop.dart';
 import 'widgets/auth_field.dart';
 import 'widgets/brand_wordmark.dart';
+import 'widgets/glow_badge.dart';
 
 /// Shown to a first-time user after they enter their number. The next screen
 /// is OTP verification.
@@ -69,60 +71,50 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final keyboardOpen = MediaQuery.viewInsetsOf(context).bottom > 0;
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-              child: Row(
-                children: [
-                  IconButton(
-                    onPressed: () => context.pop(),
-                    icon: const Icon(Icons.arrow_back, size: 22),
-                  ),
-                  const Expanded(child: Center(child: BrandWordmark(size: 22))),
-                  const SizedBox(width: 48),
-                ],
-              ),
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                keyboardDismissBehavior:
-                    ScrollViewKeyboardDismissBehavior.onDrag,
-                padding: const EdgeInsets.fromLTRB(24, 28, 24, 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+      body: AuthBackdrop(
+        child: SafeArea(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                child: Row(
                   children: [
-                    Center(
-                      child: Container(
-                        width: 64,
-                        height: 64,
-                        decoration: BoxDecoration(
-                          color: AppColors.lavender.withValues(alpha: 0.12),
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(
-                          Icons.person_add_alt_1_rounded,
-                          size: 30,
-                          color: AppColors.lavender,
-                        ),
-                      ),
+                    IconButton(
+                      onPressed: () => context.pop(),
+                      icon: const Icon(Icons.arrow_back, size: 22),
                     ),
-                    const SizedBox(height: 20),
-                    const Center(
-                      child: Text(
+                    const Expanded(
+                      child: Center(child: BrandWordmark(size: 22)),
+                    ),
+                    const SizedBox(width: 48),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  padding: const EdgeInsets.fromLTRB(24, 8, 24, 16),
+                  child: Column(
+                    children: [
+                      const _Steps(),
+                      const SizedBox(height: 10),
+                      const GlowBadge(
+                        icon: Icons.person_add_alt_1_rounded,
+                        size: 60,
+                      ),
+                      const Text(
                         'Create your account',
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    const Center(
-                      child: Text(
+                      const SizedBox(height: 8),
+                      const Text(
                         "Looks like you're new here. Tell us a bit about you.",
                         textAlign: TextAlign.center,
                         style: TextStyle(
@@ -130,78 +122,231 @@ class _SignupScreenState extends State<SignupScreen> {
                           color: Color(0xFF6B6577),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 28),
-                    const _Label('Mobile number'),
-                    _PhoneRow(pretty: _pretty, onEdit: () => context.pop()),
-                    const SizedBox(height: 18),
-                    const _Label('Full name'),
-                    AuthField(
-                      controller: _name,
-                      hint: 'Enter your full name',
-                      icon: Icons.person_outline_rounded,
-                      keyboardType: TextInputType.name,
-                      capitalization: TextCapitalization.words,
-                      textInputAction: TextInputAction.next,
-                      formatters: [
-                        FilteringTextInputFormatter.deny(RegExp(r'[0-9]')),
-                        LengthLimitingTextInputFormatter(60),
-                      ],
-                    ),
-                    const SizedBox(height: 18),
-                    const _Label('Email (optional)'),
-                    AuthField(
-                      controller: _email,
-                      hint: 'you@example.com',
-                      icon: Icons.mail_outline_rounded,
-                      keyboardType: TextInputType.emailAddress,
-                      textInputAction: TextInputAction.done,
-                      error: _emailTouched && !_emailOk,
-                    ),
-                    if (_emailTouched && !_emailOk)
-                      const Padding(
-                        padding: EdgeInsets.only(top: 6, left: 4),
-                        child: Text(
-                          'Enter a valid email address',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Color(0xFFD64560),
+                      const SizedBox(height: 22),
+                      _Reveal(
+                        child: _FormCard(
+                          children: [
+                            const _Label('Mobile number'),
+                            _PhoneRow(
+                              pretty: _pretty,
+                              onEdit: () => context.pop(),
+                            ),
+                            const SizedBox(height: 16),
+                            const _Label('Full name'),
+                            AuthField(
+                              controller: _name,
+                              hint: 'Enter your full name',
+                              icon: Icons.person_outline_rounded,
+                              keyboardType: TextInputType.name,
+                              capitalization: TextCapitalization.words,
+                              textInputAction: TextInputAction.next,
+                              valid: _nameOk,
+                              formatters: [
+                                FilteringTextInputFormatter.deny(
+                                  RegExp(r'[0-9]'),
+                                ),
+                                LengthLimitingTextInputFormatter(60),
+                              ],
+                            ),
+                            const SizedBox(height: 16),
+                            const _Label('Email (optional)'),
+                            AuthField(
+                              controller: _email,
+                              hint: 'you@example.com',
+                              icon: Icons.mail_outline_rounded,
+                              keyboardType: TextInputType.emailAddress,
+                              textInputAction: TextInputAction.done,
+                              error: _emailTouched && !_emailOk,
+                              valid: _email.text.isNotEmpty && _emailOk,
+                            ),
+                            if (_emailTouched && !_emailOk)
+                              const Padding(
+                                padding: EdgeInsets.only(top: 6, left: 4),
+                                child: Text(
+                                  'Enter a valid email address',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Color(0xFFD64560),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 18),
+                      _TermsRow(
+                        accepted: _accepted,
+                        onChanged: (v) => setState(() => _accepted = v),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(24, 4, 24, 14),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(14),
+                        boxShadow: _valid
+                            ? [
+                                BoxShadow(
+                                  color: AppColors.lavender.withValues(
+                                    alpha: 0.35,
+                                  ),
+                                  blurRadius: 18,
+                                  offset: const Offset(0, 8),
+                                ),
+                              ]
+                            : const [],
+                      ),
+                      child: SizedBox(
+                        height: 52,
+                        width: double.infinity,
+                        child: FilledButton(
+                          onPressed: _valid ? _continue : null,
+                          style: FilledButton.styleFrom(
+                            minimumSize: const Size.fromHeight(52),
+                            backgroundColor: AppColors.lavender,
+                            disabledBackgroundColor: AppColors.lavender
+                                .withValues(alpha: 0.35),
+                            disabledForegroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                          ),
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text('Continue'),
+                              SizedBox(width: 8),
+                              Icon(Icons.arrow_forward_rounded, size: 20),
+                            ],
                           ),
                         ),
                       ),
-                    const SizedBox(height: 22),
-                    _TermsRow(
-                      accepted: _accepted,
-                      onChanged: (v) => setState(() => _accepted = v),
                     ),
+                    if (!keyboardOpen) ...[
+                      const SizedBox(height: 12),
+                      const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.lock_outline_rounded,
+                            size: 13,
+                            color: Color(0xFF9A94A5),
+                          ),
+                          SizedBox(width: 6),
+                          Text(
+                            'Your details are safe and never shared',
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Color(0xFF9A94A5),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ],
                 ),
               ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// "Step 1 of 2" progress: details, then OTP.
+class _Steps extends StatelessWidget {
+  const _Steps();
+
+  @override
+  Widget build(BuildContext context) {
+    Widget bar(bool done) => Expanded(
+      child: Container(
+        height: 4,
+        decoration: BoxDecoration(
+          color: done
+              ? AppColors.lavender
+              : AppColors.lavender.withValues(alpha: 0.18),
+          borderRadius: BorderRadius.circular(2),
+        ),
+      ),
+    );
+    const small = TextStyle(fontSize: 11, fontWeight: FontWeight.w600);
+    return Column(
+      children: [
+        Row(children: [bar(true), const SizedBox(width: 6), bar(false)]),
+        const SizedBox(height: 6),
+        const Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Your details',
+              style: TextStyle(color: AppColors.lavender, fontSize: 11),
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(24, 0, 24, 16),
-              child: SizedBox(
-                height: 48,
-                width: double.infinity,
-                child: FilledButton(
-                  onPressed: _valid ? _continue : null,
-                  style: FilledButton.styleFrom(
-                    minimumSize: const Size.fromHeight(48),
-                    backgroundColor: AppColors.lavender,
-                    disabledBackgroundColor: AppColors.lavender.withValues(
-                      alpha: 0.35,
-                    ),
-                    disabledForegroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  child: const Text('Continue'),
-                ),
-              ),
-            ),
+            Text('Verify OTP', style: TextStyle(color: Color(0xFF9A94A5))),
           ],
         ),
+      ].map((w) => DefaultTextStyle.merge(style: small, child: w)).toList(),
+    );
+  }
+}
+
+/// Fades and slides its child up the first time it appears.
+class _Reveal extends StatelessWidget {
+  const _Reveal({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0, end: 1),
+      duration: const Duration(milliseconds: 450),
+      curve: Curves.easeOutCubic,
+      builder: (context, v, child) => Opacity(
+        opacity: v,
+        child: Transform.translate(
+          offset: Offset(0, (1 - v) * 18),
+          child: child,
+        ),
+      ),
+      child: child,
+    );
+  }
+}
+
+class _FormCard extends StatelessWidget {
+  const _FormCard({required this.children});
+
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: const Color(0xFFEFEAF7)),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.lavender.withValues(alpha: 0.10),
+            blurRadius: 28,
+            offset: const Offset(0, 12),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: children,
       ),
     );
   }
@@ -237,12 +382,12 @@ class _PhoneRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 52,
+      height: 54,
       padding: const EdgeInsets.symmetric(horizontal: 14),
       decoration: BoxDecoration(
-        color: const Color(0xFFF7F5FB),
+        color: const Color(0xFFF6F3FB),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: const Color(0xFFE3DFEA)),
+        border: Border.all(color: const Color(0xFFE6E0F0)),
       ),
       child: Row(
         children: [

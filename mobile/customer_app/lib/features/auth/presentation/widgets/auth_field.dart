@@ -3,8 +3,9 @@ import 'package:material_ui/material_ui.dart';
 
 import '../../../../app/app_theme.dart';
 
-/// Rounded text field matching the login phone box.
-class AuthField extends StatelessWidget {
+/// Rounded text field that matches the login phone box. Glows when focused
+/// and shows a tick once the value is valid.
+class AuthField extends StatefulWidget {
   const AuthField({
     super.key,
     required this.controller,
@@ -15,6 +16,7 @@ class AuthField extends StatelessWidget {
     this.textInputAction,
     this.formatters,
     this.error = false,
+    this.valid = false,
   });
 
   final TextEditingController controller;
@@ -26,36 +28,96 @@ class AuthField extends StatelessWidget {
   final List<TextInputFormatter>? formatters;
   final bool error;
 
+  /// Shows a tick at the end of the field.
+  final bool valid;
+
+  @override
+  State<AuthField> createState() => _AuthFieldState();
+}
+
+class _AuthFieldState extends State<AuthField> {
+  final _focus = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _focus.addListener(() => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _focus.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 52,
+    const red = Color(0xFFD64560);
+    final focused = _focus.hasFocus;
+    final accent = widget.error ? red : AppColors.lavender;
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 160),
+      curve: Curves.easeOut,
+      height: 54,
       padding: const EdgeInsets.symmetric(horizontal: 14),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: focused ? Colors.white : const Color(0xFFFCFBFE),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: error ? const Color(0xFFD64560) : const Color(0xFFE3DFEA),
+          color: focused || widget.error ? accent : const Color(0xFFE6E0F0),
+          width: focused || widget.error ? 1.6 : 1.2,
         ),
+        boxShadow: focused || widget.error
+            ? [
+                BoxShadow(
+                  color: accent.withValues(alpha: 0.16),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                ),
+              ]
+            : const [],
       ),
       child: Row(
         children: [
-          Icon(icon, size: 20, color: const Color(0xFF9A94A5)),
+          Icon(
+            widget.icon,
+            size: 20,
+            color: focused ? AppColors.lavender : const Color(0xFF9A94A5),
+          ),
           const SizedBox(width: 10),
           Expanded(
             child: TextField(
-              controller: controller,
-              keyboardType: keyboardType,
-              textCapitalization: capitalization,
-              textInputAction: textInputAction,
-              inputFormatters: formatters,
+              controller: widget.controller,
+              focusNode: _focus,
+              keyboardType: widget.keyboardType,
+              textCapitalization: widget.capitalization,
+              textInputAction: widget.textInputAction,
+              inputFormatters: widget.formatters,
               cursorColor: AppColors.lavender,
               style: const TextStyle(fontSize: 16),
               decoration: InputDecoration(
-                hintText: hint,
+                hintText: widget.hint,
                 hintStyle: const TextStyle(color: Color(0xFF9A94A5)),
                 border: InputBorder.none,
                 isDense: true,
+              ),
+            ),
+          ),
+          AnimatedScale(
+            scale: widget.valid ? 1 : 0,
+            duration: const Duration(milliseconds: 180),
+            curve: Curves.easeOutBack,
+            child: Container(
+              width: 20,
+              height: 20,
+              decoration: const BoxDecoration(
+                color: Color(0xFF1B8A4B),
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.check_rounded,
+                size: 14,
+                color: Colors.white,
               ),
             ),
           ),

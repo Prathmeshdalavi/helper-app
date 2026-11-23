@@ -9,6 +9,7 @@ import '../../../app/router/routes.dart';
 import '../domain/auth_args.dart';
 import 'widgets/auth_backdrop.dart';
 import 'widgets/brand_wordmark.dart';
+import 'widgets/glow_badge.dart';
 
 const _otpLength = 4;
 const _resendSeconds = 15;
@@ -22,12 +23,7 @@ class OtpScreen extends StatefulWidget {
   State<OtpScreen> createState() => _OtpScreenState();
 }
 
-class _OtpScreenState extends State<OtpScreen>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _halo = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 2800),
-  )..repeat();
+class _OtpScreenState extends State<OtpScreen> {
   final _controller = TextEditingController();
   final _focus = FocusNode();
   Timer? _timer;
@@ -91,7 +87,6 @@ class _OtpScreenState extends State<OtpScreen>
   @override
   void dispose() {
     _timer?.cancel();
-    _halo.dispose();
     _controller.dispose();
     _focus.dispose();
     super.dispose();
@@ -122,7 +117,7 @@ class _OtpScreenState extends State<OtpScreen>
                 ),
               ),
               const SizedBox(height: 48),
-              _LockBadge(animation: _halo),
+              const GlowBadge(icon: Icons.lock_rounded),
               const SizedBox(height: 20),
               const Text(
                 'Enter OTP',
@@ -301,73 +296,6 @@ class _OtpBox extends StatelessWidget {
           fontWeight: FontWeight.w700,
           color: filled ? AppColors.deepPlum : const Color(0xFFB4AEC2),
         ),
-      ),
-    );
-  }
-}
-
-/// Lock icon with two slow, soft rings radiating outward.
-class _LockBadge extends StatelessWidget {
-  const _LockBadge({required this.animation});
-
-  final Animation<double> animation;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 120,
-      height: 120,
-      child: AnimatedBuilder(
-        animation: animation,
-        builder: (context, _) {
-          Widget ring(double phase) {
-            final t = (animation.value + phase) % 1;
-            return Transform.scale(
-              scale: 0.62 + t * 0.38,
-              child: Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: AppColors.lavender.withValues(alpha: 0.28 * (1 - t)),
-                    width: 1.5,
-                  ),
-                ),
-              ),
-            );
-          }
-
-          return Stack(
-            alignment: Alignment.center,
-            children: [
-              ring(0),
-              ring(0.5),
-              Container(
-                width: 68,
-                height: 68,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: const LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [Color(0xFFB39BEE), AppColors.lavender],
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.lavender.withValues(alpha: 0.35),
-                      blurRadius: 18,
-                      offset: const Offset(0, 8),
-                    ),
-                  ],
-                ),
-                child: const Icon(
-                  Icons.lock_rounded,
-                  size: 30,
-                  color: Colors.white,
-                ),
-              ),
-            ],
-          );
-        },
       ),
     );
   }
