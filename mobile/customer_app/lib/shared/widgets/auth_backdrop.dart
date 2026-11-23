@@ -1,6 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 
-import '../../../../app/app_theme.dart';
+import '../../app/app_theme.dart';
 
 /// Soft lavender wash with two faint colour glows, used behind auth screens.
 /// Deliberately quiet: it should never compete with the form on top.

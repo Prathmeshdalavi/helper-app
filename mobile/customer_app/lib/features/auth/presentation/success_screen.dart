@@ -1,30 +1,39 @@
 import 'dart:async';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../../app/app_theme.dart';
 import '../../../app/router/routes.dart';
+import '../data/session.dart';
 import '../domain/auth_args.dart';
 
 /// Shown right after OTP verification, then moves on to home.
-class SuccessScreen extends StatefulWidget {
+class SuccessScreen extends ConsumerStatefulWidget {
   const SuccessScreen({super.key, this.args});
 
   final AuthArgs? args;
 
   @override
-  State<SuccessScreen> createState() => _SuccessScreenState();
+  ConsumerState<SuccessScreen> createState() => _SuccessScreenState();
 }
 
-class _SuccessScreenState extends State<SuccessScreen> {
+class _SuccessScreenState extends ConsumerState<SuccessScreen> {
   Timer? _timer;
 
   @override
   void initState() {
     super.initState();
     _timer = Timer(const Duration(milliseconds: 2600), () {
-      if (mounted) context.go(Routes.home);
+      if (!mounted) return;
+      final args = widget.args;
+      if (args != null) {
+        ref
+            .read(sessionProvider.notifier)
+            .signIn(name: args.name, phone: args.phone);
+      }
+      context.go(Routes.home);
     });
   }
 

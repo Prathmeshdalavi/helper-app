@@ -45,14 +45,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     FocusScope.of(context).unfocus();
     final phone = _controller.text;
     setState(() => _loading = true);
-    final registered = await ref
-        .read(authRepositoryProvider)
-        .isRegistered(phone);
+    final name = await ref.read(authRepositoryProvider).lookupName(phone);
     if (!mounted) return;
     setState(() => _loading = false);
     // Existing users verify with OTP; new users create an account first.
-    if (registered) {
-      context.push(Routes.otp, extra: AuthArgs(phone: phone));
+    if (name != null) {
+      context.push(
+        Routes.otp,
+        extra: AuthArgs(phone: phone, name: name),
+      );
     } else {
       context.push(
         Routes.signup,

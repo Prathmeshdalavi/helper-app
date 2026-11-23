@@ -7,7 +7,7 @@ import '../../features/auth/presentation/otp_screen.dart';
 import '../../features/auth/presentation/signup_screen.dart';
 import '../../features/auth/presentation/splash_screen.dart';
 import '../../features/auth/presentation/success_screen.dart';
-import '../../features/home/presentation/home_screen.dart';
+import '../../features/home/presentation/home_shell.dart';
 import 'routes.dart';
 
 /// Central route table. Add each feature's routes here (or compose them from
@@ -43,7 +43,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: Routes.home,
-        builder: (context, state) => const HomeScreen(),
+        builder: (context, state) => const HomeShell(),
       ),
     ],
   );

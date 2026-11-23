@@ -5,10 +5,10 @@ import 'package:material_ui/material_ui.dart';
 import '../../../app/app_theme.dart';
 import '../../../app/router/routes.dart';
 import '../domain/auth_args.dart';
-import 'widgets/auth_backdrop.dart';
+import '../../../shared/widgets/auth_backdrop.dart';
 import 'widgets/auth_field.dart';
 import 'widgets/brand_wordmark.dart';
-import 'widgets/glow_badge.dart';
+import '../../../shared/widgets/glow_badge.dart';
 
 /// Shown to a first-time user after they enter their number. The next screen
 /// is OTP verification.

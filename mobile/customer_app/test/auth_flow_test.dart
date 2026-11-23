@@ -82,7 +82,7 @@ void main() {
     expect(find.text("You're all set!"), findsOneWidget);
 
     await _pumpFor(tester, 3200);
-    expect(find.text('Welcome to HerCare'), findsOneWidget);
+    expect(find.text('Hi, Anita'), findsOneWidget);
   });
 
   testWidgets('registered number skips sign up and goes to OTP', (
@@ -134,6 +134,9 @@ void main() {
     expect(find.text("You're all set!"), findsOneWidget);
     await _pumpFor(tester, 100);
     expect(find.text('Welcome to HerCare, Priya'), findsOneWidget);
+
+    await _pumpFor(tester, 3200);
+    expect(find.text('Hi, Priya'), findsOneWidget);
   });
 
   testWidgets('wrong OTP shows an error', (tester) async {

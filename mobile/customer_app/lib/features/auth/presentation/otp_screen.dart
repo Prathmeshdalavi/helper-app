@@ -7,9 +7,9 @@ import 'package:material_ui/material_ui.dart';
 import '../../../app/app_theme.dart';
 import '../../../app/router/routes.dart';
 import '../domain/auth_args.dart';
-import 'widgets/auth_backdrop.dart';
+import '../../../shared/widgets/auth_backdrop.dart';
 import 'widgets/brand_wordmark.dart';
-import 'widgets/glow_badge.dart';
+import '../../../shared/widgets/glow_badge.dart';
 
 const _otpLength = 4;
 const _resendSeconds = 15;

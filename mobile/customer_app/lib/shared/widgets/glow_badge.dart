@@ -1,6 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 
-import '../../../../app/app_theme.dart';
+import '../../app/app_theme.dart';
 
 /// Gradient icon badge with two slow rings radiating outward. Shared by the
 /// auth screens so they feel like one flow.
