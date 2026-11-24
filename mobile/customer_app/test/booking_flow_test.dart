@@ -3,6 +3,7 @@ import 'package:customer_app/features/booking/data/booking_store.dart';
 import 'package:customer_app/features/booking/domain/booking.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'test_app.dart';
 
@@ -20,6 +21,20 @@ ProviderContainer _containerWithDraft({bool instant = false}) {
   final c = ProviderContainer();
   c.read(draftProvider.notifier).set(_draft(instant: instant));
   return c;
+}
+
+/// Scrolls the screen's main list until [target] is on screen.
+Future<void> scrollTo(WidgetTester tester, Finder target) async {
+  final list = find
+      .descendant(
+        of: find.byType(ListView).first,
+        matching: find.byType(Scrollable),
+      )
+      .first;
+  await tester.scrollUntilVisible(target, 200, scrollable: list);
+  // Nudge it clear of the screen edge so a tap lands on it.
+  await tester.drag(list, const Offset(0, -80));
+  await tester.pump(const Duration(milliseconds: 300));
 }
 
 void main() {
@@ -108,18 +123,92 @@ void main() {
 
     Future<void> next() async {
       final button = find.text('Debug: preview next stage');
-      await tester.scrollUntilVisible(button, 200);
+      await scrollTo(tester, button);
       await tester.tap(button);
       await pumpFor(tester, 600);
+      // Back to the top, where each stage's main card sits.
+      await tester.drag(find.byType(ListView).first, const Offset(0, 3000));
+      await pumpFor(tester, 300);
     }
 
     await next();
-    expect(find.text('Your expert has arrived'), findsOneWidget);
+    expect(find.text('Expert arrived'), findsOneWidget);
+    expect(find.text('Sunita has arrived!'), findsOneWidget);
     await next();
     expect(find.text('Service in progress'), findsOneWidget);
     await next();
     expect(find.text('Service about to end'), findsOneWidget);
     await next();
     expect(find.text('Service completed'), findsOneWidget);
+  });
+
+  Booking runningBooking(ProviderContainer c, int advances) {
+    final store = c.read(bookingStoreProvider.notifier);
+    final b = store.create(_draft(), paidWith: 'GPay UPI');
+    for (var i = 0; i < advances; i++) {
+      store.advance(b.id);
+    }
+    return c.read(bookingByIdProvider(b.id))!;
+  }
+
+  testWidgets('the running service shows a countdown and can be extended', (
+    tester,
+  ) async {
+    final c = ProviderContainer();
+    final b = runningBooking(c, 2);
+    await pumpApp(tester, Routes.bookingDetail(b.id), container: c);
+    await pumpFor(tester, 400);
+    expect(find.text('Service in progress'), findsOneWidget);
+    expect(find.text('Time remaining'), findsOneWidget);
+    expect(find.text('Check-out code'), findsOneWidget);
+
+    await tester.tap(find.text('Extend service'));
+    await pumpFor(tester, 500);
+    await tester.tap(find.text('30 min'));
+    await pumpFor(tester, 300);
+    await tester.tap(find.text('Pay now'));
+    await pumpFor(tester, 1500);
+    expect(c.read(bookingByIdProvider(b.id))!.extraMinutes, 30);
+    expect(c.read(bookingByIdProvider(b.id))!.extraPaid, 79);
+  });
+
+  testWidgets('a finished service can be rated and a friend invited', (
+    tester,
+  ) async {
+    final c = ProviderContainer();
+    final b = runningBooking(c, 4);
+    await pumpApp(tester, Routes.bookingDetail(b.id), container: c);
+    await pumpFor(tester, 400);
+    expect(find.text('Service completed'), findsOneWidget);
+    expect(find.text('Rate your experience'), findsOneWidget);
+
+    await tester.tap(find.byIcon(Icons.star_rounded).at(4));
+    await pumpFor(tester, 600);
+    expect(find.text('Your rating'), findsOneWidget);
+    expect(
+      find.text('Did your expert go the extra mile? Add an extra star.'),
+      findsOneWidget,
+    );
+
+    await tester.tap(find.text('Submit'));
+    await pumpFor(tester, 900);
+    expect(c.read(bookingByIdProvider(b.id))!.rating, 5);
+    expect(find.text('Invite a friend\nand get ₹200'), findsOneWidget);
+  });
+
+  testWidgets("What's included lists tasks for each group", (tester) async {
+    final c = ProviderContainer();
+    final b = runningBooking(c, 0);
+    await pumpApp(tester, Routes.bookingDetail(b.id), container: c);
+    await scrollTo(tester, find.text("See what's included"));
+    await tester.tap(find.text("See what's included"));
+    await pumpFor(tester, 500);
+    expect(find.text('What is included?'), findsOneWidget);
+    expect(find.text('Sweep and mop accessible floors'), findsOneWidget);
+    await tester.ensureVisible(find.text('Bathroom cleaning'));
+    await pumpFor(tester, 300);
+    await tester.tap(find.text('Bathroom cleaning'));
+    await pumpFor(tester, 500);
+    expect(find.text('Clean the toilet seat, rim and lid'), findsOneWidget);
   });
 }

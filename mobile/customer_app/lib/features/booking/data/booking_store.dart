@@ -92,16 +92,24 @@ class BookingStore extends Notifier<List<Booking>> {
   /// TODO(booking): stages come from the server (expert check-in, timers).
   void advance(String id) {
     update(id, (b) {
+      final now = DateTime.now();
       switch (b.status) {
         case BookingStatus.confirmed:
           return b.copyWith(
             status: BookingStatus.arrived,
+            arrivedAt: now,
             expert: b.expert ?? const Expert(name: 'Sunita Rao', rating: 4.8),
           );
         case BookingStatus.arrived:
-          return b.copyWith(status: BookingStatus.inProgress);
+          return b.copyWith(status: BookingStatus.inProgress, startedAt: now);
         case BookingStatus.inProgress:
-          return b.copyWith(status: BookingStatus.aboutToEnd);
+          // Jump to the last two minutes so the end of the visit can be seen.
+          return b.copyWith(
+            status: BookingStatus.aboutToEnd,
+            startedAt: now.subtract(
+              Duration(seconds: b.totalMinutes * 60 - 125),
+            ),
+          );
         case BookingStatus.aboutToEnd:
           return b.copyWith(status: BookingStatus.completed);
         case BookingStatus.completed:
@@ -110,6 +118,24 @@ class BookingStore extends Notifier<List<Booking>> {
       }
     });
   }
+
+  /// Adds paid time to a running visit.
+  void extend(String id, {required int minutes, required int price}) {
+    update(
+      id,
+      (b) => b.copyWith(
+        extraMinutes: b.extraMinutes + minutes,
+        extraPaid: b.extraPaid + price,
+        status: BookingStatus.inProgress,
+      ),
+    );
+  }
+
+  void rate(String id, {required int stars, bool extraStar = false}) =>
+      update(id, (b) => b.copyWith(rating: stars, extraStar: extraStar));
+
+  void favourite(String id, bool value) =>
+      update(id, (b) => b.copyWith(favourited: value));
 }
 
 final bookingStoreProvider = NotifierProvider<BookingStore, List<Booking>>(

@@ -109,6 +109,9 @@ class Booking {
     this.favourited = false,
     this.extraMinutes = 0,
     this.extraPaid = 0,
+    this.arrivedAt,
+    this.startedAt,
+    this.extraStar = false,
   });
 
   final String id;
@@ -127,10 +130,21 @@ class Booking {
   final int extraMinutes;
   final int extraPaid;
 
+  /// When the expert reached the door, and when the service began.
+  final DateTime? arrivedAt;
+  final DateTime? startedAt;
+
+  /// The customer gave the optional "extra mile" star.
+  final bool extraStar;
+
   Bill get bill => draft.bill;
   int get totalMinutes => draft.minutes + extraMinutes;
   DateTime get start => draft.start;
   DateTime get end => start.add(Duration(minutes: totalMinutes));
+
+  /// When the running service ends; falls back to the scheduled end.
+  DateTime get serviceEnd =>
+      (startedAt ?? start).add(Duration(minutes: totalMinutes));
 
   bool get isActive =>
       status == BookingStatus.confirmed ||
@@ -145,6 +159,9 @@ class Booking {
     bool? favourited,
     int? extraMinutes,
     int? extraPaid,
+    DateTime? arrivedAt,
+    DateTime? startedAt,
+    bool? extraStar,
   }) => Booking(
     id: id,
     draft: draft,
@@ -159,5 +176,8 @@ class Booking {
     favourited: favourited ?? this.favourited,
     extraMinutes: extraMinutes ?? this.extraMinutes,
     extraPaid: extraPaid ?? this.extraPaid,
+    arrivedAt: arrivedAt ?? this.arrivedAt,
+    startedAt: startedAt ?? this.startedAt,
+    extraStar: extraStar ?? this.extraStar,
   );
 }

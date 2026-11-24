@@ -44,7 +44,7 @@ class _InstantMapState extends State<InstantMap>
         return Stack(
           clipBehavior: Clip.none,
           children: [
-            Positioned.fill(child: CustomPaint(painter: _StreetsPainter())),
+            Positioned.fill(child: CustomPaint(painter: StreetsPainter())),
             // Dashed route from the chosen helper to the customer.
             Positioned.fill(
               child: TweenAnimationBuilder<Offset>(
@@ -119,7 +119,8 @@ class _InstantMapState extends State<InstantMap>
   }
 }
 
-class _StreetsPainter extends CustomPainter {
+/// The painted streets, shared with the booking screen.
+class StreetsPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     canvas.drawRect(
