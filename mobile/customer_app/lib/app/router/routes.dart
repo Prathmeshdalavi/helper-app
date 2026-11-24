@@ -7,6 +7,8 @@ abstract final class Routes {
   static const success = '/success';
   static const home = '/home';
   static const schedule = '/schedule';
+  static const search = '/search';
+  static const explore = '/explore';
   static const wallet = '/wallet';
   static const help = '/help';
   static const support = '/support';

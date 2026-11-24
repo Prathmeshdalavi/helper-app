@@ -3,7 +3,10 @@ import 'package:material_ui/material_ui.dart';
 
 import '../../../../app/app_theme.dart';
 import '../../../../shared/widgets/app_photo.dart';
+import '../../../account/data/address_store.dart';
+import '../../../account/presentation/saved_addresses_sheet.dart';
 import '../../../auth/data/session.dart';
+import '../home_tab_provider.dart';
 import 'common.dart';
 
 /// Full-width photo at the top with the location row and greeting over it.
@@ -17,6 +20,7 @@ class HomeHero extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(sessionProvider);
     final name = session.firstName;
+    final address = ref.watch(selectedAddressProvider);
     return SizedBox(
       height: height,
       child: Stack(
@@ -53,28 +57,28 @@ class HomeHero extends ConsumerWidget {
                     children: [
                       Expanded(
                         child: Pressable(
-                          onTap: () => comingSoon(context, 'Address book'),
+                          onTap: () => showSavedAddressesSheet(context),
                           scale: 0.98,
-                          child: const Column(
+                          child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
                                 children: [
-                                  Icon(
+                                  const Icon(
                                     Icons.location_on_rounded,
                                     color: Colors.white,
                                     size: 18,
                                   ),
-                                  SizedBox(width: 4),
+                                  const SizedBox(width: 4),
                                   Text(
-                                    'Home',
-                                    style: TextStyle(
+                                    address.label,
+                                    style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 17,
                                       fontWeight: FontWeight.w800,
                                     ),
                                   ),
-                                  Icon(
+                                  const Icon(
                                     Icons.keyboard_arrow_down_rounded,
                                     color: Colors.white,
                                     size: 22,
@@ -82,10 +86,12 @@ class HomeHero extends ConsumerWidget {
                                 ],
                               ),
                               Padding(
-                                padding: EdgeInsets.only(left: 22),
+                                padding: const EdgeInsets.only(left: 22),
                                 child: Text(
-                                  'Add your address',
-                                  style: TextStyle(
+                                  address.line1,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
                                     color: Color(0xCCFFFFFF),
                                     fontSize: 12,
                                   ),
@@ -96,7 +102,7 @@ class HomeHero extends ConsumerWidget {
                         ),
                       ),
                       Pressable(
-                        onTap: () => comingSoon(context, 'Offers'),
+                        onTap: () => ref.read(homeTabProvider.notifier).show(2),
                         child: Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 12,
@@ -131,20 +137,23 @@ class HomeHero extends ConsumerWidget {
                         ),
                       ),
                       const SizedBox(width: 10),
-                      Container(
-                        width: 38,
-                        height: 38,
-                        alignment: Alignment.center,
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Text(
-                          session.initial,
-                          style: const TextStyle(
-                            color: AppColors.lavender,
-                            fontWeight: FontWeight.w800,
-                            fontSize: 16,
+                      Pressable(
+                        onTap: () => ref.read(homeTabProvider.notifier).show(3),
+                        child: Container(
+                          width: 38,
+                          height: 38,
+                          alignment: Alignment.center,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Text(
+                            session.initial,
+                            style: const TextStyle(
+                              color: AppColors.lavender,
+                              fontWeight: FontWeight.w800,
+                              fontSize: 16,
+                            ),
                           ),
                         ),
                       ),

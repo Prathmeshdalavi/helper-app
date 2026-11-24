@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../../../app/app_theme.dart';
+import '../../../../app/router/routes.dart';
 import '../../../../shared/widgets/app_photo.dart';
 import 'common.dart';
 
@@ -137,7 +139,7 @@ class _Banner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Pressable(
-      onTap: () => comingSoon(context, 'Booking'),
+      onTap: () => context.push(Routes.schedule),
       scale: 0.985,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(22),

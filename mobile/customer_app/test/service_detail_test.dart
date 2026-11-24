@@ -2,6 +2,7 @@ import 'package:customer_app/app/app_theme.dart';
 import 'package:customer_app/features/services/data/demo_service_details.dart';
 import 'package:customer_app/features/services/data/demo_services.dart';
 import 'package:customer_app/features/services/presentation/service_detail_screen.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -10,9 +11,11 @@ Future<void> _pumpDetail(WidgetTester tester, String id) async {
   tester.view.devicePixelRatio = 3;
   addTearDown(tester.view.reset);
   await tester.pumpWidget(
-    MaterialApp(
-      theme: AppTheme.light(),
-      home: ServiceDetailScreen(serviceId: id),
+    ProviderScope(
+      child: MaterialApp(
+        theme: AppTheme.light(),
+        home: ServiceDetailScreen(serviceId: id),
+      ),
     ),
   );
   await tester.pump(const Duration(milliseconds: 200));
@@ -37,12 +40,14 @@ void main() {
     expect(find.text('Sweeping and mopping'), findsOneWidget);
   });
 
-  testWidgets('Book now shows the coming soon message', (tester) async {
+  testWidgets('Book now offers Schedule or Instant', (tester) async {
     await _pumpDetail(tester, 'cooking');
 
     await tester.tap(find.text('Book now'));
     await tester.pump(const Duration(milliseconds: 300));
-    expect(find.text('Booking is coming soon'), findsOneWidget);
+    expect(find.text('Book Cooking'), findsOneWidget);
+    expect(find.text('Schedule'), findsOneWidget);
+    expect(find.text('Instant'), findsOneWidget);
   });
 
   testWidgets('unknown service shows a friendly message', (tester) async {

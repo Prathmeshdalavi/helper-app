@@ -20,6 +20,8 @@ import '../../features/booking/presentation/payment_options_screen.dart';
 import '../../features/booking/presentation/payment_status_screen.dart';
 import '../../features/booking/presentation/schedule_screen.dart';
 import '../../features/home/presentation/home_shell.dart';
+import '../../features/services/presentation/explore_screen.dart';
+import '../../features/services/presentation/search_screen.dart';
 import '../../features/services/presentation/service_detail_screen.dart';
 import 'routes.dart';
 
@@ -60,6 +62,14 @@ GoRouter buildRouter({String initialLocation = Routes.splash}) {
       GoRoute(
         path: Routes.home,
         builder: (context, state) => const HomeShell(),
+      ),
+      GoRoute(
+        path: Routes.search,
+        builder: (context, state) => const SearchScreen(),
+      ),
+      GoRoute(
+        path: Routes.explore,
+        builder: (context, state) => const ExploreScreen(),
       ),
       GoRoute(
         path: Routes.wallet,

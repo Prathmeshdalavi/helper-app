@@ -245,7 +245,7 @@ class _ExploreRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final photos = DemoServices.exploreMosaic;
     return Pressable(
-      onTap: () => comingSoon(context, 'More services'),
+      onTap: () => context.push(Routes.explore),
       scale: 0.985,
       child: Container(
         padding: const EdgeInsets.all(14),

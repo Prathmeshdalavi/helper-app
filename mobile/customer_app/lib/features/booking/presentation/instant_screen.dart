@@ -42,7 +42,7 @@ class _InstantBodyState extends ConsumerState<_InstantBody> {
         .read(draftProvider.notifier)
         .set(
           BookingDraft(
-            serviceTitle: 'Home help',
+            serviceTitle: ref.read(selectedServiceProvider),
             start: DateTime.now(),
             minutes: _duration.minutes,
             price: _duration.price,

@@ -1,8 +1,10 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../../app/app_theme.dart';
 import '../../../shared/widgets/app_photo.dart';
+import '../../booking/presentation/book_sheet.dart';
 import '../../home/presentation/widgets/common.dart';
 import '../data/demo_service_details.dart';
 import '../data/demo_services.dart';
@@ -399,13 +401,13 @@ class _ReviewCard extends StatelessWidget {
   }
 }
 
-class _BookBar extends StatelessWidget {
+class _BookBar extends ConsumerWidget {
   const _BookBar({required this.category});
 
   final ServiceCategory category;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final bottom = MediaQuery.paddingOf(context).bottom;
     return Container(
       padding: EdgeInsets.fromLTRB(20, 12, 20, 12 + bottom),
@@ -441,8 +443,8 @@ class _BookBar extends StatelessWidget {
           const SizedBox(width: 20),
           Expanded(
             child: FilledButton(
-              // TODO(booking): open the booking flow (date, address, summary).
-              onPressed: () => comingSoon(context, 'Booking'),
+              onPressed: () =>
+                  showBookSheet(context, ref, service: category.title),
               child: const Text('Book now'),
             ),
           ),

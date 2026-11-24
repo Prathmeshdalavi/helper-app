@@ -87,7 +87,7 @@ class _ScheduleBodyState extends ConsumerState<_ScheduleBody> {
         .read(draftProvider.notifier)
         .set(
           BookingDraft(
-            serviceTitle: 'Home help',
+            serviceTitle: ref.read(selectedServiceProvider),
             start: DateTime(
               day.year,
               day.month,

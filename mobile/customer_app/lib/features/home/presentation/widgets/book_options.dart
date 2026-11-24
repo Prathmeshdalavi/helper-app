@@ -1,10 +1,12 @@
 import 'dart:async';
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../../../app/app_theme.dart';
 import '../../../../app/router/routes.dart';
+import '../../../booking/data/booking_store.dart';
 import 'common.dart';
 
 /// Plain search box with hints that change every few seconds.
@@ -44,7 +46,7 @@ class _HomeSearchState extends State<HomeSearch> {
   @override
   Widget build(BuildContext context) {
     return Pressable(
-      onTap: () => comingSoon(context, 'Search'),
+      onTap: () => context.push(Routes.search),
       scale: 0.985,
       child: Container(
         height: 52,
@@ -97,11 +99,11 @@ class _HomeSearchState extends State<HomeSearch> {
 }
 
 /// Two ways to book: pick a time, or get the fastest helper.
-class BookOptions extends StatelessWidget {
+class BookOptions extends ConsumerWidget {
   const BookOptions({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Row(
       children: [
         Expanded(
@@ -121,7 +123,10 @@ class BookOptions extends StatelessWidget {
             ),
             title: 'Schedule',
             subtitle: 'Pick a time that suits you',
-            onTap: () => context.push(Routes.schedule),
+            onTap: () {
+              ref.read(selectedServiceProvider.notifier).set('Home help');
+              context.push(Routes.schedule);
+            },
           ),
         ),
         const SizedBox(width: 12),
@@ -162,7 +167,10 @@ class BookOptions extends StatelessWidget {
             ),
             title: 'Instant',
             subtitle: 'Fastest helper near you',
-            onTap: () => context.push(Routes.instant),
+            onTap: () {
+              ref.read(selectedServiceProvider.notifier).set('Home help');
+              context.push(Routes.instant);
+            },
           ),
         ),
       ],

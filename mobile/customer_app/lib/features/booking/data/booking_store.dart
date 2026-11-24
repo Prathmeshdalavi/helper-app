@@ -16,6 +16,20 @@ final draftProvider = NotifierProvider<DraftNotifier, BookingDraft?>(
   DraftNotifier.new,
 );
 
+/// The service being booked, shown on checkout. Home's Schedule and Instant
+/// book a general "Home help" visit.
+class SelectedServiceNotifier extends Notifier<String> {
+  @override
+  String build() => 'Home help';
+
+  void set(String title) => state = title;
+}
+
+final selectedServiceProvider =
+    NotifierProvider<SelectedServiceNotifier, String>(
+      SelectedServiceNotifier.new,
+    );
+
 /// How the customer pays. Shown on the checkout bar.
 class PaymentMethod {
   const PaymentMethod(this.id, this.label);

@@ -97,20 +97,6 @@ void main() {
     expect(find.text('Schedule for later'), findsOneWidget);
   });
 
-  testWidgets('Explore more row is reachable and responds', (tester) async {
-    await _pumpHome(tester);
-    final list = find.byType(SingleChildScrollView).first;
-    final row = find.text('Explore more services');
-    await tester.dragUntilVisible(row, list, const Offset(0, -120));
-    // Keep it clear of the floating bottom bar (which starts near y = 760).
-    final y = tester.getCenter(row).dy;
-    if (y > 650) await tester.drag(list, Offset(0, -(y - 450)));
-    await _pumpFor(tester, 500);
-    await tester.tap(row);
-    await _pumpFor(tester, 400);
-    expect(find.text('More services is coming soon'), findsOneWidget);
-  });
-
   testWidgets('bottom bar switches between tabs', (tester) async {
     await _pumpHome(tester);
 
