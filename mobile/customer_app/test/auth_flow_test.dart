@@ -57,7 +57,7 @@ void main() {
     tester.view.devicePixelRatio = 3;
     addTearDown(tester.view.reset);
     await _toLogin(tester);
-    expect(find.text('Laundry, sorted'), findsOneWidget);
+    expect(find.text('Pet care, with love'), findsOneWidget);
 
     Future<void> swipeLeft() async {
       await tester.drag(find.byType(PageView), const Offset(-500, 0));
@@ -65,11 +65,24 @@ void main() {
     }
 
     await swipeLeft();
+    expect(find.text('Laundry, sorted'), findsOneWidget);
+    await swipeLeft();
     expect(find.text('Spotless floors'), findsOneWidget);
     await swipeLeft();
-    expect(find.text('Pet care, with love'), findsOneWidget);
-    await swipeLeft();
     expect(find.text('Sparkling dishes'), findsOneWidget);
+  });
+
+  testWidgets('hero scenes swap by themselves, dog first', (tester) async {
+    tester.view.physicalSize = const Size(1170, 2532);
+    tester.view.devicePixelRatio = 3;
+    addTearDown(tester.view.reset);
+    await _toLogin(tester);
+    expect(find.text('Pet care, with love'), findsOneWidget);
+
+    await _pumpFor(tester, 3600);
+    expect(find.text('Laundry, sorted'), findsOneWidget);
+    await _pumpFor(tester, 3000);
+    expect(find.text('Spotless floors'), findsOneWidget);
   });
 
   testWidgets('phone -> OTP -> success -> home', (tester) async {

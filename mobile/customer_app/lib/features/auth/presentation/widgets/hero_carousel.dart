@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/scheduler.dart';
@@ -17,12 +18,16 @@ class _Slide {
   final String subtitle;
 }
 
+/// The pet scene leads; the others follow.
 const _slides = <_Slide>[
+  _Slide('Pet care, with love', 'Walks, play and feeding while you are away'),
   _Slide('Laundry, sorted', 'Fresh, folded clothes without lifting a finger'),
   _Slide('Spotless floors', 'Deep-cleaned by verified, trained helpers'),
-  _Slide('Pet care, with love', 'Walks, play and feeding while you are away'),
   _Slide('Sparkling dishes', 'Dishwashing done before you sit down'),
 ];
+
+/// How long each scene stays before the next one slides in.
+const _autoAdvance = Duration(milliseconds: 2800);
 
 /// Swipeable hero of animated scenes. The scene on screen runs by itself; the
 /// one you leave winds down.
@@ -40,18 +45,34 @@ class _HeroCarouselState extends State<HeroCarousel>
   final _controller = PageController();
   final _frames = List.generate(_slides.length, (_) => SceneFrame());
   late final List<ScenePainter> _painters = [
-    WashingMachinePainter(_frames[0], _clock),
-    CleaningPainter(_frames[1], _clock),
-    PetPainter(_frames[2], _clock),
+    PetPainter(_frames[0], _clock),
+    WashingMachinePainter(_frames[1], _clock),
+    CleaningPainter(_frames[2], _clock),
     DishesPainter(_frames[3], _clock),
   ];
   Duration _last = Duration.zero;
   int _active = 0;
+  Timer? _auto;
 
   @override
   void initState() {
     super.initState();
     _ticker = createTicker(_tick)..start();
+    _restartAuto();
+  }
+
+  /// Moves to the next scene after a pause; a swipe restarts the pause.
+  void _restartAuto() {
+    _auto?.cancel();
+    _auto = Timer.periodic(_autoAdvance, (_) {
+      if (!mounted || !_controller.hasClients) return;
+      final next = (_active + 1) % _slides.length;
+      _controller.animateToPage(
+        next,
+        duration: Duration(milliseconds: next == 0 ? 700 : 600),
+        curve: Curves.easeInOutCubic,
+      );
+    });
   }
 
   double _approach(double v, double target, double step) =>
@@ -75,10 +96,12 @@ class _HeroCarouselState extends State<HeroCarousel>
   void _onPage(int i) {
     HapticFeedback.selectionClick();
     setState(() => _active = i);
+    _restartAuto();
   }
 
   @override
   void dispose() {
+    _auto?.cancel();
     _ticker.dispose();
     _clock.dispose();
     _controller.dispose();
