@@ -170,6 +170,7 @@ class _Hero extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       child: Stack(
+        alignment: Alignment.topCenter,
         children: [
           const Positioned.fill(
             child: DecoratedBox(
