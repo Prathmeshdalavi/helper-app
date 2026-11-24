@@ -369,10 +369,32 @@ class _HelperRow extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 1),
-                    Text(
-                      h.isBest ? '${h.etaMinutes} min' : '★ ${h.rating}',
-                      style: const TextStyle(fontSize: 11, color: AppInk.muted),
-                    ),
+                    h.isBest
+                        ? Text(
+                            '${h.etaMinutes} min',
+                            style: const TextStyle(
+                              fontSize: 11,
+                              color: AppInk.muted,
+                            ),
+                          )
+                        : Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(
+                                Icons.star_rounded,
+                                size: 13,
+                                color: Color(0xFFF2B84B),
+                              ),
+                              const SizedBox(width: 2),
+                              Text(
+                                '${h.rating}',
+                                style: const TextStyle(
+                                  fontSize: 11,
+                                  color: AppInk.muted,
+                                ),
+                              ),
+                            ],
+                          ),
                   ],
                 ),
               ),

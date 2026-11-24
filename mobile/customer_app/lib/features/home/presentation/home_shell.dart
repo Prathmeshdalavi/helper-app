@@ -1,25 +1,22 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../../app/app_theme.dart';
-import '../../../app/router/routes.dart';
-import '../../../shared/widgets/auth_backdrop.dart';
-import '../../../shared/widgets/glow_badge.dart';
-import '../../auth/data/session.dart';
+import '../../account/presentation/account_tab.dart';
+import '../../account/presentation/offers_tab.dart';
+import '../../booking/presentation/bookings_tab.dart';
 import 'home_tab.dart';
+import 'home_tab_provider.dart';
 
 /// Signed-in shell: the four main tabs with a floating bottom bar.
-class HomeShell extends StatefulWidget {
+class HomeShell extends ConsumerStatefulWidget {
   const HomeShell({super.key});
 
   @override
-  State<HomeShell> createState() => _HomeShellState();
+  ConsumerState<HomeShell> createState() => _HomeShellState();
 }
 
-class _HomeShellState extends State<HomeShell> {
-  int _index = 0;
-
+class _HomeShellState extends ConsumerState<HomeShell> {
   static const _tabs = <_NavTab>[
     _NavTab('Home', Icons.home_rounded, Icons.home_outlined),
     _NavTab('Bookings', Icons.event_note_rounded, Icons.event_note_outlined),
@@ -29,25 +26,18 @@ class _HomeShellState extends State<HomeShell> {
 
   @override
   Widget build(BuildContext context) {
+    final index = ref.watch(homeTabProvider);
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
         children: [
           IndexedStack(
-            index: _index,
+            index: index,
             children: const [
               HomeTab(),
-              _EmptyTab(
-                icon: Icons.event_note_rounded,
-                title: 'No bookings yet',
-                message: 'Your upcoming and past bookings will show up here once you book a helper.',
-              ),
-              _EmptyTab(
-                icon: Icons.local_offer_rounded,
-                title: 'Offers are on the way',
-                message: 'Discounts and promo codes will appear here.',
-              ),
-              _AccountTab(),
+              BookingsTab(),
+              OffersTab(),
+              AccountTab(),
             ],
           ),
           Positioned(
@@ -58,8 +48,8 @@ class _HomeShellState extends State<HomeShell> {
               top: false,
               child: _BottomBar(
                 tabs: _tabs,
-                index: _index,
-                onChanged: (i) => setState(() => _index = i),
+                index: index,
+                onChanged: (i) => ref.read(homeTabProvider.notifier).show(i),
               ),
             ),
           ),
@@ -156,147 +146,6 @@ class _BottomBar extends StatelessWidget {
               ),
             ),
         ],
-      ),
-    );
-  }
-}
-
-/// Friendly empty state for tabs that are not built yet.
-class _EmptyTab extends StatelessWidget {
-  const _EmptyTab({
-    required this.icon,
-    required this.title,
-    required this.message,
-  });
-
-  final IconData icon;
-  final String title;
-  final String message;
-
-  @override
-  Widget build(BuildContext context) {
-    return AuthBackdrop(
-      child: SafeArea(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(36, 0, 36, 90),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                GlowBadge(icon: icon),
-                const SizedBox(height: 8),
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  message,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    height: 1.4,
-                    color: Color(0xFF6B6577),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _AccountTab extends ConsumerWidget {
-  const _AccountTab();
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final session = ref.watch(sessionProvider);
-    return AuthBackdrop(
-      child: SafeArea(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(28, 0, 28, 90),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 92,
-                  height: 92,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: const LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [Color(0xFFB39BEE), AppColors.lavender],
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.lavender.withValues(alpha: 0.35),
-                        blurRadius: 22,
-                        offset: const Offset(0, 10),
-                      ),
-                    ],
-                  ),
-                  child: Text(
-                    session.initial,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 38,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 18),
-                Text(
-                  (session.name ?? '').isEmpty ? 'Your account' : session.name!,
-                  style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                if (session.prettyPhone.isNotEmpty)
-                  Text(
-                    session.prettyPhone,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: Color(0xFF6B6577),
-                    ),
-                  ),
-                const SizedBox(height: 28),
-                SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: OutlinedButton.icon(
-                    onPressed: () {
-                      // TODO(auth): also clear tokens and call POST /auth/logout.
-                      ref.read(sessionProvider.notifier).signOut();
-                      context.go(Routes.login);
-                    },
-                    icon: const Icon(Icons.logout_rounded, size: 20),
-                    label: const Text('Log out'),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: AppColors.lavender,
-                      side: BorderSide(
-                        color: AppColors.lavender.withValues(alpha: 0.4),
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
       ),
     );
   }

@@ -3,9 +3,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 /// Who is signed in. In-memory for now.
 /// TODO(auth): hydrate from TokenStorage / GET /users/me on app start.
 class Session {
-  const Session({this.name, this.phone});
+  const Session({this.name, this.phone, this.email, this.gender});
 
   final String? name;
+
+  /// Optional contact email.
+  final String? email;
+
+  /// 'Male', 'Female' or 'Other'; optional.
+  final String? gender;
 
   /// 10 digit number without the country code.
   final String? phone;
@@ -32,6 +38,14 @@ class SessionNotifier extends Notifier<Session> {
 
   void signIn({String? name, required String phone}) =>
       state = Session(name: name, phone: phone);
+
+  void updateProfile({String? name, String? email, String? gender}) =>
+      state = Session(
+        name: name ?? state.name,
+        phone: state.phone,
+        email: email ?? state.email,
+        gender: gender ?? state.gender,
+      );
 
   void signOut() => state = const Session();
 }

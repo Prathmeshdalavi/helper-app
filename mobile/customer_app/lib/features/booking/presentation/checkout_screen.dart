@@ -6,6 +6,8 @@ import '../../../app/app_theme.dart';
 import '../../../app/router/routes.dart';
 import '../../../shared/widgets/premium.dart';
 import '../../home/presentation/widgets/common.dart';
+import '../../account/data/address_store.dart';
+import '../../account/presentation/saved_addresses_sheet.dart';
 import '../data/booking_store.dart';
 import '../domain/booking.dart';
 import '../domain/when.dart';
@@ -21,6 +23,7 @@ class CheckoutScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final draft = ref.watch(draftProvider);
     final method = ref.watch(paymentMethodProvider);
+    final address = ref.watch(selectedAddressProvider);
     if (draft == null) {
       return PremiumScope(
         child: Scaffold(
@@ -41,8 +44,9 @@ class CheckoutScreen extends ConsumerWidget {
               Container(
                 color: Colors.white,
                 child: PremiumTopBar(
-                  title: demoAddress.label,
-                  subtitle: demoAddress.line1,
+                  title: address.label,
+                  subtitle: address.line1,
+                  onTapTitle: () => showSavedAddressesSheet(context),
                 ),
               ),
               const Divider(height: 1, color: AppInk.hairline),

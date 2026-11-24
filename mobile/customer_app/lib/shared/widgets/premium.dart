@@ -13,8 +13,14 @@ class PremiumScope extends StatelessWidget {
   final Widget child;
 
   @override
-  Widget build(BuildContext context) =>
-      Theme(data: AppTheme.withFigtree(Theme.of(context)), child: child);
+  Widget build(BuildContext context) => Theme(
+    data: AppTheme.withFigtree(Theme.of(context)),
+    // Text outside a Scaffold (tabs, sheets) takes its font from here.
+    child: DefaultTextStyle.merge(
+      style: const TextStyle(fontFamily: 'Figtree', color: AppInk.text),
+      child: child,
+    ),
+  );
 }
 
 const premiumSelectedFill = Color(0xFFF3EEFD);
@@ -28,6 +34,22 @@ const premiumEase = Curves.easeOutCubic;
 String rupees(num v) {
   final whole = v == v.roundToDouble();
   return '₹${whole ? v.round() : v.toStringAsFixed(2)}';
+}
+
+/// A short floating message at the bottom of the screen.
+void toast(BuildContext context, String message) {
+  ScaffoldMessenger.of(context)
+    ..hideCurrentSnackBar()
+    ..showSnackBar(
+      SnackBar(
+        behavior: SnackBarBehavior.floating,
+        margin: const EdgeInsets.fromLTRB(20, 0, 20, 96),
+        backgroundColor: AppInk.text,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        content: Text(message),
+        duration: const Duration(milliseconds: 1800),
+      ),
+    );
 }
 
 /// A white surface with a hairline and a very soft shadow.

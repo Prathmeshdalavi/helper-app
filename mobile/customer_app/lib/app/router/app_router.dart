@@ -1,6 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/account/presentation/experts_screen.dart';
+import '../../features/account/presentation/favourites_screen.dart';
+import '../../features/account/presentation/help_screen.dart';
+import '../../features/account/presentation/manage_account_screen.dart';
+import '../../features/account/presentation/support_chat_screen.dart';
+import '../../features/account/presentation/wallet_screen.dart';
 import '../../features/auth/domain/auth_args.dart';
 import '../../features/auth/presentation/login_screen.dart';
 import '../../features/auth/presentation/otp_screen.dart';
@@ -54,6 +60,30 @@ GoRouter buildRouter({String initialLocation = Routes.splash}) {
       GoRoute(
         path: Routes.home,
         builder: (context, state) => const HomeShell(),
+      ),
+      GoRoute(
+        path: Routes.wallet,
+        builder: (context, state) => const WalletScreen(),
+      ),
+      GoRoute(
+        path: Routes.help,
+        builder: (context, state) => const HelpScreen(),
+      ),
+      GoRoute(
+        path: Routes.support,
+        builder: (context, state) => const SupportChatScreen(),
+      ),
+      GoRoute(
+        path: Routes.experts,
+        builder: (context, state) => const ExpertsScreen(),
+      ),
+      GoRoute(
+        path: Routes.favourites,
+        builder: (context, state) => const FavouritesScreen(),
+      ),
+      GoRoute(
+        path: Routes.manageAccount,
+        builder: (context, state) => const ManageAccountScreen(),
       ),
       GoRoute(
         path: Routes.checkout,

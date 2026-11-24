@@ -1,15 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../account/data/address_store.dart';
 import '../domain/booking.dart';
-
-/// Where the customer lives. One demo address until Saved addresses exists.
-/// TODO(addresses): replace with GET /users/me/addresses.
-const demoAddress = Address(
-  id: 'home',
-  label: 'Home',
-  line1: 'B104, Sai Prasad Enclave, 36 Kamothe Marg',
-  line2: 'Shalome CHS, Sector 8, Kamothe, Panvel, Maharashtra 410209',
-);
 
 /// The booking being set up, from the Schedule or Instant screen to payment.
 class DraftNotifier extends Notifier<BookingDraft?> {
@@ -67,7 +59,7 @@ class BookingStore extends Notifier<List<Booking>> {
     final booking = Booking(
       id: id,
       draft: draft,
-      address: demoAddress,
+      address: ref.read(selectedAddressProvider),
       status: BookingStatus.confirmed,
       paidWith: paidWith,
       checkInOtp: otp,
@@ -136,7 +128,43 @@ class BookingStore extends Notifier<List<Booking>> {
 
   void favourite(String id, bool value) =>
       update(id, (b) => b.copyWith(favourited: value));
+
+  /// Marks every visit by this expert as favourite (or not).
+  void setExpertFavourite(String expertName, bool value) {
+    state = [
+      for (final b in state)
+        b.expert?.name == expertName ? b.copyWith(favourited: value) : b,
+    ];
+  }
 }
+
+/// An expert who has visited, with how often and whether they are a favourite.
+class ExpertEntry {
+  const ExpertEntry({
+    required this.expert,
+    required this.visits,
+    required this.favourite,
+  });
+
+  final Expert expert;
+  final int visits;
+  final bool favourite;
+}
+
+final expertsProvider = Provider<List<ExpertEntry>>((ref) {
+  final byName = <String, ExpertEntry>{};
+  for (final b in ref.watch(bookingStoreProvider)) {
+    final e = b.expert;
+    if (e == null || b.status == BookingStatus.cancelled) continue;
+    final prev = byName[e.name];
+    byName[e.name] = ExpertEntry(
+      expert: e,
+      visits: (prev?.visits ?? 0) + 1,
+      favourite: (prev?.favourite ?? false) || b.favourited,
+    );
+  }
+  return byName.values.toList();
+});
 
 final bookingStoreProvider = NotifierProvider<BookingStore, List<Booking>>(
   BookingStore.new,

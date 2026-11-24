@@ -8,7 +8,7 @@ import 'package:material_ui/material_ui.dart';
 import '../../../app/app_theme.dart';
 import '../../../app/router/routes.dart';
 import '../../../shared/widgets/premium.dart';
-import '../../home/presentation/widgets/common.dart';
+import '../../account/data/address_store.dart';
 import '../data/booking_store.dart';
 import '../domain/when.dart';
 
@@ -147,6 +147,7 @@ class PaymentFailedScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final draft = ref.watch(draftProvider);
+    final address = ref.watch(selectedAddressProvider);
     final clock = now ?? DateTime.now();
     return PremiumScope(
       child: Scaffold(
@@ -198,7 +199,7 @@ class PaymentFailedScreen extends ConsumerWidget {
                           when: draft.instant
                               ? 'Instant · ${draft.durationLabel} visit'
                               : '${whenLabel(draft.start, clock)} · ${draft.durationLabel} visit',
-                          address: '${demoAddress.label} | ${demoAddress.full}',
+                          address: '${address.label} | ${address.full}',
                         ),
                       const SizedBox(height: 14),
                       AppCard(
@@ -216,7 +217,7 @@ class PaymentFailedScreen extends ConsumerWidget {
                               title: 'Contact support',
                               subtitle: 'Get quick help for your queries',
                               divider: false,
-                              onTap: () => comingSoon(context, 'Support'),
+                              onTap: () => context.push(Routes.support),
                             ),
                           ],
                         ),

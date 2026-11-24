@@ -7,6 +7,12 @@ abstract final class Routes {
   static const success = '/success';
   static const home = '/home';
   static const schedule = '/schedule';
+  static const wallet = '/wallet';
+  static const help = '/help';
+  static const support = '/support';
+  static const experts = '/experts';
+  static const favourites = '/favourites';
+  static const manageAccount = '/manage-account';
   static const checkout = '/checkout';
   static const payment = '/payment';
   static const paymentStatus = '/payment-status';

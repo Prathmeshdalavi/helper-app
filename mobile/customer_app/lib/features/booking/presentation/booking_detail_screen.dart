@@ -14,6 +14,7 @@ import '../../home/presentation/widgets/common.dart';
 import '../data/booking_store.dart';
 import '../domain/booking.dart';
 import '../domain/when.dart';
+import 'booking_sheets.dart';
 import 'extend_sheet.dart';
 import 'inclusions_sheet.dart';
 import 'instant_map.dart';
@@ -560,7 +561,7 @@ class _Body extends ConsumerWidget {
                 subtitle: b.draft.instant
                     ? 'Cancel booking'
                     : 'Reschedule or cancel booking',
-                onTap: () => comingSoon(context, 'Modify booking'),
+                onTap: () => showModifyBookingSheet(context, b),
               ),
             ListRow(
               icon: Icons.currency_rupee_rounded,
@@ -568,14 +569,14 @@ class _Body extends ConsumerWidget {
               subtitle: b.extraPaid > 0
                   ? 'Paid ${rupees(b.bill.total + b.extraPaid)} including extra time'
                   : 'View detailed price summary',
-              onTap: () => comingSoon(context, 'Payment details'),
+              onTap: () => showPaymentDetailsSheet(context, b),
             ),
             ListRow(
               icon: Icons.headset_mic_outlined,
               title: 'Contact support',
               subtitle: 'Get quick help for your queries',
               divider: false,
-              onTap: () => comingSoon(context, 'Support'),
+              onTap: () => context.push(Routes.support),
             ),
           ],
         ),

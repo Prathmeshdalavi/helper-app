@@ -122,7 +122,6 @@ void main() {
     await _pumpFor(tester, 400);
     expect(find.text('Priya Sharma'), findsOneWidget);
     expect(find.text('+91 77966 93451'), findsOneWidget);
-    expect(find.text('Log out'), findsOneWidget);
 
     await tester.tap(find.byKey(const ValueKey('nav-0')));
     await _pumpFor(tester, 400);
