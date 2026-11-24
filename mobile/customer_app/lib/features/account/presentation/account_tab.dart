@@ -12,6 +12,7 @@ import '../../booking/presentation/rating_sheet.dart';
 import '../../home/presentation/home_tab_provider.dart';
 import '../../home/presentation/widgets/common.dart';
 import '../data/address_store.dart';
+import '../data/wallet_store.dart';
 import 'edit_profile_sheet.dart';
 import 'saved_addresses_sheet.dart';
 
@@ -22,14 +23,13 @@ const _goldFill = Color(0xFFFBF3E2);
 class AccountTab extends ConsumerWidget {
   const AccountTab({super.key});
 
-  static const _heroHeight = 262.0;
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(sessionProvider);
     final bookings = ref.watch(bookingStoreProvider);
     final experts = ref.watch(expertsProvider);
     final address = ref.watch(selectedAddressProvider);
+    final walletBalance = ref.watch(walletProvider).balance;
     final favourites = [
       for (final e in experts)
         if (e.favourite) e,
@@ -47,7 +47,6 @@ class AccountTab extends ConsumerWidget {
             child: Column(
               children: [
                 _Hero(
-                  height: _heroHeight,
                   initial: session.initial,
                   name: name.isEmpty ? 'Your account' : name,
                   phone: session.prettyPhone,
@@ -61,6 +60,7 @@ class AccountTab extends ConsumerWidget {
                       children: [
                         _StatsCard(
                           bookings: bookings.length,
+                          wallet: rupees(walletBalance),
                           favourites: favourites.length,
                           onBookings: () =>
                               ref.read(homeTabProvider.notifier).show(1),
@@ -153,14 +153,12 @@ class AccountTab extends ConsumerWidget {
 
 class _Hero extends StatelessWidget {
   const _Hero({
-    required this.height,
     required this.initial,
     required this.name,
     required this.phone,
     required this.onEdit,
   });
 
-  final double height;
   final String initial;
   final String name;
   final String phone;
@@ -170,21 +168,21 @@ class _Hero extends StatelessWidget {
   Widget build(BuildContext context) {
     final top = MediaQuery.paddingOf(context).top;
     return SizedBox(
-      height: height + top * 0.4,
       width: double.infinity,
       child: Stack(
-        fit: StackFit.expand,
         children: [
-          const DecoratedBox(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Color(0xFF9B80DE),
-                  Color(0xFF6C4FB3),
-                  Color(0xFF4F3892),
-                ],
+          const Positioned.fill(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Color(0xFF9B80DE),
+                    Color(0xFF6C4FB3),
+                    Color(0xFF4F3892),
+                  ],
+                ),
               ),
             ),
           ),
@@ -199,10 +197,11 @@ class _Hero extends StatelessWidget {
             bottom: -50,
             child: _Ring(size: 200, alpha: 0.08),
           ),
+          // Sized by its content, so a tall status bar can never overflow it.
           Padding(
-            padding: EdgeInsets.only(top: top + 10, bottom: 38),
+            padding: EdgeInsets.only(top: top + 18, bottom: 58),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
                   width: 84,
@@ -321,6 +320,7 @@ class _Ring extends StatelessWidget {
 class _StatsCard extends StatelessWidget {
   const _StatsCard({
     required this.bookings,
+    required this.wallet,
     required this.favourites,
     required this.onBookings,
     required this.onWallet,
@@ -328,6 +328,7 @@ class _StatsCard extends StatelessWidget {
   });
 
   final int bookings;
+  final String wallet;
   final int favourites;
   final VoidCallback onBookings;
   final VoidCallback onWallet;
@@ -380,7 +381,7 @@ class _StatsCard extends StatelessWidget {
         children: [
           stat('$bookings', 'Bookings', onBookings),
           divider(),
-          stat('₹0', 'Wallet', onWallet),
+          stat(wallet, 'Wallet', onWallet),
           divider(),
           stat('$favourites', 'Favourites', onFavourites),
         ],

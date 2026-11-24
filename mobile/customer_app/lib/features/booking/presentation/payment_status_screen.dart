@@ -9,13 +9,17 @@ import '../../../app/app_theme.dart';
 import '../../../app/router/routes.dart';
 import '../../../shared/widgets/premium.dart';
 import '../../account/data/address_store.dart';
+import '../../account/data/wallet_store.dart';
 import '../data/booking_store.dart';
 import '../domain/when.dart';
 
 /// "We're confirming your payment". Moves on by itself.
 /// TODO(payments): wait for the payment gateway result instead of a timer.
 class PaymentStatusScreen extends ConsumerStatefulWidget {
-  const PaymentStatusScreen({super.key, this.wait});
+  const PaymentStatusScreen({super.key, this.wait, this.topUp});
+
+  /// Set when this payment adds money to the wallet.
+  final int? topUp;
 
   /// How long the demo waits before succeeding. Tests shorten this.
   final Duration? wait;
@@ -41,9 +45,26 @@ class _PaymentStatusScreenState extends ConsumerState<PaymentStatusScreen> {
   }
 
   void _succeed() {
+    if (!mounted) return;
+    final topUp = widget.topUp;
+    if (topUp != null) {
+      ref.read(walletProvider.notifier).topUp(topUp);
+      toast(context, 'Added ${rupees(topUp)} to your wallet');
+      context.pop();
+      return;
+    }
     final draft = ref.read(draftProvider);
-    if (!mounted || draft == null) return;
+    if (draft == null) return;
     final method = ref.read(paymentMethodProvider);
+    if (method.id == 'wallet') {
+      final ok = ref
+          .read(walletProvider.notifier)
+          .spend(draft.bill.total, 'Paid for ${draft.serviceTitle}');
+      if (!ok) {
+        _fail();
+        return;
+      }
+    }
     final booking = ref
         .read(bookingStoreProvider.notifier)
         .create(draft, paidWith: method.label);

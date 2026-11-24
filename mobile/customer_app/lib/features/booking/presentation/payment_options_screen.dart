@@ -6,11 +6,15 @@ import '../../../app/app_theme.dart';
 import '../../../app/router/routes.dart';
 import '../../../shared/widgets/premium.dart';
 import '../../home/presentation/widgets/common.dart';
+import '../../account/data/wallet_store.dart';
 import '../data/booking_store.dart';
 
 /// Choose how to pay. UPI apps first, then cards and other options.
 class PaymentOptionsScreen extends ConsumerStatefulWidget {
-  const PaymentOptionsScreen({super.key});
+  const PaymentOptionsScreen({super.key, this.topUp});
+
+  /// Set when paying to add money to the wallet instead of for a booking.
+  final int? topUp;
 
   @override
   ConsumerState<PaymentOptionsScreen> createState() =>
@@ -32,13 +36,55 @@ class _PaymentOptionsScreenState extends ConsumerState<PaymentOptionsScreen> {
     return RegExp(r'^[\w.\-]{2,}@[\w]{2,}$').hasMatch(t);
   }
 
-  void _pay() => context.pushReplacement(Routes.paymentStatus);
+  void _pay() =>
+      context.pushReplacement(Routes.paymentStatus, extra: widget.topUp);
+
+  void _confirmWallet(double total, double balance) {
+    showPremiumSheet<void>(
+      context,
+      builder: (ctx) => Padding(
+        padding: const EdgeInsets.fromLTRB(20, 18, 20, 24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Pay from wallet',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              '₹${total.toStringAsFixed(2)} will be taken from your wallet. '
+              'You will have ${rupees((balance - total).clamp(0, double.infinity))} left.',
+              style: const TextStyle(
+                fontSize: 14,
+                height: 1.45,
+                color: AppInk.muted,
+              ),
+            ),
+            const SizedBox(height: 20),
+            PrimaryButton(
+              label: 'Pay ₹${total.toStringAsFixed(2)}',
+              onPressed: () {
+                Navigator.of(ctx).pop();
+                ref
+                    .read(paymentMethodProvider.notifier)
+                    .select(const PaymentMethod('wallet', 'Wallet'));
+                _pay();
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final draft = ref.watch(draftProvider);
     final method = ref.watch(paymentMethodProvider);
-    final total = draft?.bill.total ?? 0;
+    final total = widget.topUp?.toDouble() ?? draft?.bill.total ?? 0;
+    final wallet = ref.watch(walletProvider);
 
     return PremiumScope(
       child: Scaffold(
@@ -147,12 +193,23 @@ class _PaymentOptionsScreenState extends ConsumerState<PaymentOptionsScreen> {
                     title: 'Other options',
                     child: Column(
                       children: [
-                        _OptionRow(
-                          icon: Icons.account_balance_wallet_outlined,
-                          label: 'Wallet',
-                          hint: 'Balance ₹0',
-                          onTap: () => comingSoon(context, 'Wallet payments'),
-                        ),
+                        if (widget.topUp == null)
+                          _OptionRow(
+                            icon: Icons.account_balance_wallet_outlined,
+                            label: 'Wallet',
+                            hint: 'Balance ${rupees(wallet.balance)}',
+                            onTap: () {
+                              if (wallet.balance + 0.001 < total) {
+                                toast(
+                                  context,
+                                  'Wallet balance is ${rupees(wallet.balance)}. '
+                                  'Add money from Wallet first.',
+                                );
+                                return;
+                              }
+                              _confirmWallet(total, wallet.balance);
+                            },
+                          ),
                         _OptionRow(
                           icon: Icons.schedule_send_outlined,
                           label: 'Pay later',

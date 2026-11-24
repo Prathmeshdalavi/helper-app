@@ -101,11 +101,13 @@ GoRouter buildRouter({String initialLocation = Routes.splash}) {
       ),
       GoRoute(
         path: Routes.payment,
-        builder: (context, state) => const PaymentOptionsScreen(),
+        builder: (context, state) =>
+            PaymentOptionsScreen(topUp: state.extra as int?),
       ),
       GoRoute(
         path: Routes.paymentStatus,
-        builder: (context, state) => const PaymentStatusScreen(),
+        builder: (context, state) =>
+            PaymentStatusScreen(topUp: state.extra as int?),
       ),
       GoRoute(
         path: Routes.paymentFailed,

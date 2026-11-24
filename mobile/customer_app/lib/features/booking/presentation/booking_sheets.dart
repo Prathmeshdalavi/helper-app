@@ -4,6 +4,7 @@ import 'package:material_ui/material_ui.dart';
 import '../../../app/app_theme.dart';
 import '../../../shared/widgets/premium.dart';
 import '../../home/presentation/widgets/common.dart';
+import '../../account/data/wallet_store.dart';
 import '../data/booking_store.dart';
 import '../domain/booking.dart';
 
@@ -147,6 +148,15 @@ class _ModifyState extends ConsumerState<_Modify> {
 
   void _cancel() {
     ref.read(bookingStoreProvider.notifier).cancel(b.id);
+    if (b.paidWith == 'Wallet') {
+      final paid = b.bill.total + b.extraPaid;
+      ref
+          .read(walletProvider.notifier)
+          .refund(
+            (_free ? paid : paid - 49).clamp(0, paid).toDouble(),
+            'Refund for ${b.draft.serviceTitle}',
+          );
+    }
     final messenger = ScaffoldMessenger.of(context);
     Navigator.of(context).pop();
     messenger

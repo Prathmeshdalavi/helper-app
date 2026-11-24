@@ -1,5 +1,6 @@
 import 'package:customer_app/app/router/routes.dart';
 import 'package:customer_app/features/account/data/address_store.dart';
+import 'package:customer_app/features/account/data/wallet_store.dart';
 import 'package:customer_app/features/auth/data/session.dart';
 import 'package:customer_app/features/booking/data/booking_store.dart';
 import 'package:customer_app/features/booking/domain/booking.dart';
@@ -138,12 +139,100 @@ void main() {
     expect(find.text('Paid for Home help'), findsOneWidget);
     expect(find.text('−₹115.75'), findsOneWidget);
 
+    // The Added filter hides it, the Spent filter keeps it.
+    await tester.tap(find.text('Added'));
+    await pumpFor(tester, 400);
+    expect(find.text('Paid for Home help'), findsNothing);
+    expect(find.text('No transactions yet'), findsOneWidget);
+    await tester.tap(find.text('Spent'));
+    await pumpFor(tester, 400);
+    expect(find.text('Paid for Home help'), findsOneWidget);
+  });
+
+  testWidgets('the add money sheet checks the amount and shows the bonus', (
+    tester,
+  ) async {
+    final c = _signedIn();
+    await pumpApp(tester, Routes.wallet, container: c);
     await tester.tap(find.text('Add money'));
     await pumpFor(tester, 600);
     expect(find.text('Add ₹500'), findsOneWidget);
-    await tester.tap(find.text('₹1000'));
+    expect(find.text('You get ₹25 extra as bonus'), findsOneWidget);
+
+    await tester.enterText(find.byType(TextField), '20');
     await pumpFor(tester, 300);
-    expect(find.text('Add ₹1000'), findsOneWidget);
+    expect(find.text('Enter an amount from ₹50 to ₹10,000'), findsOneWidget);
+    await tester.enterText(find.byType(TextField), '200');
+    await pumpFor(tester, 300);
+    expect(find.text('Add ₹200'), findsOneWidget);
+    expect(find.text('You get ₹25 extra as bonus'), findsNothing);
+  });
+
+  testWidgets('adding money pays, credits the wallet and the bonus', (
+    tester,
+  ) async {
+    final c = _signedIn();
+    await pumpApp(tester, Routes.wallet, container: c);
+    await tester.tap(find.text('₹500').first);
+    await pumpFor(tester, 600);
+    expect(find.text('To pay: ₹500.00'), findsOneWidget);
+    expect(find.text('Wallet'), findsNothing);
+    await tester.tap(find.text('Pay ₹500.00'));
+    await pumpFor(tester, 800);
+    await pumpFor(tester, 3200);
+    final w = c.read(walletProvider);
+    expect(w.cash, 500);
+    expect(w.bonus, 25);
+    expect(find.text('Available balance'), findsOneWidget);
+    expect(find.text('Added to wallet'), findsOneWidget);
+    expect(find.text('Bonus on top-up'), findsOneWidget);
+  });
+
+  testWidgets('a booking can be paid from the wallet', (tester) async {
+    final c = _signedIn();
+    c.read(walletProvider.notifier).topUp(1000);
+    c.read(draftProvider.notifier).set(_draft());
+    await pumpApp(tester, Routes.payment, container: c);
+    expect(find.text('Balance ₹1050'), findsOneWidget);
+    await tester.tap(find.text('Wallet'));
+    await pumpFor(tester, 600);
+    expect(find.text('Pay from wallet'), findsOneWidget);
+    await tester.tap(find.text('Pay ₹115.75').last);
+    await pumpFor(tester, 800);
+    await pumpFor(tester, 3200);
+    final b = c.read(bookingStoreProvider).first;
+    expect(b.paidWith, 'Wallet');
+    expect(c.read(walletProvider).balance, closeTo(1050 - 115.75, 0.01));
+    expect(find.text('Booking confirmed'), findsOneWidget);
+  });
+
+  testWidgets('a low wallet cannot pay a booking', (tester) async {
+    final c = _signedIn();
+    c.read(draftProvider.notifier).set(_draft());
+    await pumpApp(tester, Routes.payment, container: c);
+    await tester.tap(find.text('Wallet'));
+    await pumpFor(tester, 500);
+    expect(find.textContaining('Wallet balance is ₹0'), findsOneWidget);
+    expect(find.text('Pay from wallet'), findsNothing);
+  });
+
+  testWidgets('cancelling a wallet booking refunds it', (tester) async {
+    final c = _signedIn();
+    c.read(walletProvider.notifier).topUp(1000);
+    c.read(walletProvider.notifier).spend(115.75, 'Paid for Home help');
+    final b = c
+        .read(bookingStoreProvider.notifier)
+        .create(_draft(), paidWith: 'Wallet');
+    await pumpApp(tester, Routes.bookingDetail(b.id), container: c);
+    await tester.drag(find.byType(ListView).first, const Offset(0, -700));
+    await pumpFor(tester, 300);
+    await tester.tap(find.text('Modify booking'));
+    await pumpFor(tester, 600);
+    await tester.tap(find.text('Cancel booking').first);
+    await pumpFor(tester, 500);
+    await tester.tap(find.text('Cancel booking').last);
+    await pumpFor(tester, 800);
+    expect(c.read(walletProvider).balance, closeTo(1050, 0.01));
   });
 
   testWidgets('Help opens answers, searches and reaches the chat', (
