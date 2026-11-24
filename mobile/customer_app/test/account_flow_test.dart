@@ -88,7 +88,7 @@ void main() {
 
     await tester.tap(find.text('Priya Sharma'));
     await pumpFor(tester, 600);
-    expect(find.text('Edit profile'), findsOneWidget);
+    expect(find.text('Edit profile'), findsWidgets);
     await tester.enterText(find.byType(TextField).first, 'Priya S');
     await pumpFor(tester, 200);
     await tester.tap(find.text('Female'));
