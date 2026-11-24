@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../../../app/app_theme.dart';
+import '../../../../app/router/routes.dart';
 import 'common.dart';
 
 /// Plain search box with hints that change every few seconds.
@@ -119,7 +121,7 @@ class BookOptions extends StatelessWidget {
             ),
             title: 'Schedule',
             subtitle: 'Pick a time that suits you',
-            onTap: () => comingSoon(context, 'Scheduling'),
+            onTap: () => context.push(Routes.schedule),
           ),
         ),
         const SizedBox(width: 12),
@@ -160,7 +162,7 @@ class BookOptions extends StatelessWidget {
             ),
             title: 'Instant',
             subtitle: 'Fastest helper near you',
-            onTap: () => comingSoon(context, 'Instant booking'),
+            onTap: () => context.push(Routes.instant),
           ),
         ),
       ],

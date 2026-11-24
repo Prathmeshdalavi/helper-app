@@ -7,7 +7,10 @@ import '../../features/auth/presentation/otp_screen.dart';
 import '../../features/auth/presentation/signup_screen.dart';
 import '../../features/auth/presentation/splash_screen.dart';
 import '../../features/auth/presentation/success_screen.dart';
+import '../../features/booking/presentation/instant_screen.dart';
+import '../../features/booking/presentation/schedule_screen.dart';
 import '../../features/home/presentation/home_shell.dart';
+import '../../features/services/presentation/service_detail_screen.dart';
 import 'routes.dart';
 
 /// Central route table. Add each feature's routes here (or compose them from
@@ -44,6 +47,19 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: Routes.home,
         builder: (context, state) => const HomeShell(),
+      ),
+      GoRoute(
+        path: Routes.instant,
+        builder: (context, state) => const InstantScreen(),
+      ),
+      GoRoute(
+        path: Routes.schedule,
+        builder: (context, state) => const ScheduleScreen(),
+      ),
+      GoRoute(
+        path: Routes.service,
+        builder: (context, state) =>
+            ServiceDetailScreen(serviceId: state.pathParameters['id']!),
       ),
     ],
   );

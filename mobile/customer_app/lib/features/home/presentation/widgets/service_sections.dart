@@ -1,6 +1,8 @@
+import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../../../app/app_theme.dart';
+import '../../../../app/router/routes.dart';
 import '../../../../shared/widgets/app_photo.dart';
 import '../../../services/data/demo_services.dart';
 import '../../../services/domain/service_item.dart';
@@ -51,7 +53,7 @@ class _ServiceCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = category;
     return Pressable(
-      onTap: () => comingSoon(context, c.title),
+      onTap: () => context.push(Routes.serviceDetail(c.id)),
       scale: 0.97,
       child: Container(
         clipBehavior: Clip.antiAlias,

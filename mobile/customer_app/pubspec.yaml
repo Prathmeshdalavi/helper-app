@@ -26,3 +26,17 @@ flutter:
 
   assets:
     - assets/images/
+
+  fonts:
+    # Figtree (SIL Open Font License, see assets/fonts/Figtree-OFL.txt).
+    # One variable file; each weight below maps to its wght axis value.
+    - family: Figtree
+      fonts:
+        - asset: assets/fonts/Figtree.ttf
+          weight: 400
+        - asset: assets/fonts/Figtree.ttf
+          weight: 500
+        - asset: assets/fonts/Figtree.ttf
+          weight: 600
+        - asset: assets/fonts/Figtree.ttf
+          weight: 700

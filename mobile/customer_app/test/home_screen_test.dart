@@ -1,8 +1,11 @@
 import 'package:customer_app/app/app_theme.dart';
+import 'package:customer_app/app/router/routes.dart';
 import 'package:customer_app/features/auth/data/session.dart';
+import 'package:customer_app/features/booking/presentation/schedule_screen.dart';
 import 'package:customer_app/features/home/presentation/home_shell.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 
 /// Advance time in small steps (timers and looping animations never settle).
@@ -27,7 +30,18 @@ Future<void> _pumpHome(WidgetTester tester) async {
   await tester.pumpWidget(
     UncontrolledProviderScope(
       container: container,
-      child: MaterialApp(theme: AppTheme.light(), home: const HomeShell()),
+      child: MaterialApp.router(
+        theme: AppTheme.light(),
+        routerConfig: GoRouter(
+          routes: [
+            GoRoute(path: '/', builder: (_, _) => const HomeShell()),
+            GoRoute(
+              path: Routes.schedule,
+              builder: (_, _) => const ScheduleScreen(),
+            ),
+          ],
+        ),
+      ),
     ),
   );
   await _pumpFor(tester, 1000);
@@ -76,13 +90,11 @@ void main() {
     expect(find.text('A helper for\nthe full day'), findsOneWidget);
   });
 
-  testWidgets('tapping a booking option explains it is coming soon', (
-    tester,
-  ) async {
+  testWidgets('Schedule opens the schedule screen', (tester) async {
     await _pumpHome(tester);
     await tester.tap(find.text('Schedule'));
-    await _pumpFor(tester, 400);
-    expect(find.text('Scheduling is coming soon'), findsOneWidget);
+    await _pumpFor(tester, 600);
+    expect(find.text('Schedule for later'), findsOneWidget);
   });
 
   testWidgets('Explore more row is reachable and responds', (tester) async {

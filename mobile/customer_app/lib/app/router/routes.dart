@@ -6,4 +6,10 @@ abstract final class Routes {
   static const otp = '/otp';
   static const success = '/success';
   static const home = '/home';
+  static const schedule = '/schedule';
+  static const instant = '/instant';
+  static const service = '/service/:id';
+
+  /// Path for one service's detail screen.
+  static String serviceDetail(String id) => '/service/$id';
 }
