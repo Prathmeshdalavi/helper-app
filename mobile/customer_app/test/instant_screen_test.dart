@@ -1,6 +1,7 @@
 import 'package:customer_app/app/app_theme.dart';
 import 'package:customer_app/features/booking/data/demo_instant.dart';
 import 'package:customer_app/features/booking/presentation/instant_screen.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -9,7 +10,9 @@ Future<void> _pump(WidgetTester tester) async {
   tester.view.devicePixelRatio = 3;
   addTearDown(tester.view.reset);
   await tester.pumpWidget(
-    MaterialApp(theme: AppTheme.light(), home: const InstantScreen()),
+    ProviderScope(
+      child: MaterialApp(theme: AppTheme.light(), home: const InstantScreen()),
+    ),
   );
   // The map pulses forever, so step time instead of settling.
   for (var i = 0; i < 6; i++) {
@@ -66,12 +69,5 @@ void main() {
     expect(find.text('Not available'), findsNWidgets(3));
     // The 3 hr choice no longer fits, so it falls back to 90 minutes.
     expect(find.text('₹199'), findsWidgets);
-  });
-
-  testWidgets('Continue says booking is coming soon', (tester) async {
-    await _pump(tester);
-    await tester.tap(find.text('Continue'));
-    await _step(tester);
-    expect(find.text('Booking is coming soon'), findsOneWidget);
   });
 }

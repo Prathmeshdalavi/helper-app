@@ -1,9 +1,13 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../../app/app_theme.dart';
+import '../../../app/router/routes.dart';
 import '../../home/presentation/widgets/common.dart';
+import '../data/booking_store.dart';
 import '../data/demo_schedule.dart';
+import '../domain/booking.dart';
 
 const _selectedFill = Color(0xFFF3EEFD);
 const _surcharge = Color(0xFFE8782B);
@@ -25,16 +29,16 @@ class ScheduleScreen extends StatelessWidget {
   }
 }
 
-class _ScheduleBody extends StatefulWidget {
+class _ScheduleBody extends ConsumerStatefulWidget {
   const _ScheduleBody({this.now});
 
   final DateTime? now;
 
   @override
-  State<_ScheduleBody> createState() => _ScheduleBodyState();
+  ConsumerState<_ScheduleBody> createState() => _ScheduleBodyState();
 }
 
-class _ScheduleBodyState extends State<_ScheduleBody> {
+class _ScheduleBodyState extends ConsumerState<_ScheduleBody> {
   late final DateTime _now = widget.now ?? DateTime.now();
   late final List<DateTime> _days = [
     for (var i = 0; i < 7; i++)
@@ -73,6 +77,31 @@ class _ScheduleBodyState extends State<_ScheduleBody> {
   }
 
   int get _total => (_duration?.price ?? 0) + (_slot?.extra ?? 0);
+
+  void _continue() {
+    final d = _duration;
+    final slot = _slot;
+    if (d == null || slot == null) return;
+    final day = _days[_day];
+    ref
+        .read(draftProvider.notifier)
+        .set(
+          BookingDraft(
+            serviceTitle: 'Home help',
+            start: DateTime(
+              day.year,
+              day.month,
+              day.day,
+              slot.minuteOfDay ~/ 60,
+              slot.minuteOfDay % 60,
+            ),
+            minutes: d.minutes,
+            price: d.price + slot.extra,
+            originalPrice: d.originalPrice + slot.extra,
+          ),
+        );
+    context.push(Routes.checkout);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -190,12 +219,7 @@ class _ScheduleBodyState extends State<_ScheduleBody> {
                 ],
               ),
             ),
-            _CartBar(
-              ready: ready,
-              total: _total,
-              // TODO(booking): add the visit to the cart and continue.
-              onTap: () => comingSoon(context, 'Cart'),
-            ),
+            _CartBar(ready: ready, total: _total, onTap: _continue),
           ],
         ),
       ),
@@ -799,7 +823,7 @@ class _CartBar extends StatelessWidget {
         child: AnimatedSwitcher(
           duration: const Duration(milliseconds: 200),
           child: Text(
-            ready ? 'Add to cart  ·  ₹$total' : 'Add to cart',
+            ready ? 'Continue  ·  ₹$total' : 'Continue',
             key: ValueKey(ready ? total : -1),
           ),
         ),

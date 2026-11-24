@@ -7,9 +7,17 @@ abstract final class Routes {
   static const success = '/success';
   static const home = '/home';
   static const schedule = '/schedule';
+  static const checkout = '/checkout';
+  static const payment = '/payment';
+  static const paymentStatus = '/payment-status';
+  static const paymentFailed = '/payment-failed';
+  static const booking = '/booking/:id';
   static const instant = '/instant';
   static const service = '/service/:id';
 
   /// Path for one service's detail screen.
   static String serviceDetail(String id) => '/service/$id';
+
+  /// Path for one booking's live screen.
+  static String bookingDetail(String id) => '/booking/$id';
 }

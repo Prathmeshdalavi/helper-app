@@ -1,6 +1,7 @@
 import 'package:customer_app/app/app_theme.dart';
 import 'package:customer_app/features/booking/data/demo_schedule.dart';
 import 'package:customer_app/features/booking/presentation/schedule_screen.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -9,9 +10,11 @@ Future<void> _pump(WidgetTester tester, DateTime now) async {
   tester.view.devicePixelRatio = 3;
   addTearDown(tester.view.reset);
   await tester.pumpWidget(
-    MaterialApp(
-      theme: AppTheme.light(),
-      home: ScheduleScreen(now: now),
+    ProviderScope(
+      child: MaterialApp(
+        theme: AppTheme.light(),
+        home: ScheduleScreen(now: now),
+      ),
     ),
   );
   await tester.pumpAndSettle();
@@ -52,7 +55,7 @@ void main() {
     );
   });
 
-  testWidgets('Add to cart stays disabled until duration and slot are set', (
+  testWidgets('Continue stays disabled until duration and slot are set', (
     tester,
   ) async {
     await _pump(tester, morning);
@@ -68,7 +71,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(_cartButton(tester).onPressed, isNotNull);
     // ₹129 for the hour plus ₹10 for the busy slot.
-    expect(find.text('Add to cart  ·  ₹139'), findsOneWidget);
+    expect(find.text('Continue  ·  ₹139'), findsOneWidget);
   });
 
   testWidgets('switching to Afternoon shows afternoon slots', (tester) async {

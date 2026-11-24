@@ -1,9 +1,13 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../../app/app_theme.dart';
+import '../../../app/router/routes.dart';
 import '../../home/presentation/widgets/common.dart';
+import '../data/booking_store.dart';
 import '../data/demo_instant.dart';
+import '../domain/booking.dart';
 import 'instant_map.dart';
 
 const _selectedFill = Color(0xFFF3EEFD);
@@ -22,16 +26,34 @@ class InstantScreen extends StatelessWidget {
   }
 }
 
-class _InstantBody extends StatefulWidget {
+class _InstantBody extends ConsumerStatefulWidget {
   const _InstantBody();
 
   @override
-  State<_InstantBody> createState() => _InstantBodyState();
+  ConsumerState<_InstantBody> createState() => _InstantBodyState();
 }
 
-class _InstantBodyState extends State<_InstantBody> {
+class _InstantBodyState extends ConsumerState<_InstantBody> {
   InstantHelper _helper = DemoInstant.helpers.first;
   InstantDuration _duration = DemoInstant.durations[1];
+
+  void _continue() {
+    ref
+        .read(draftProvider.notifier)
+        .set(
+          BookingDraft(
+            serviceTitle: 'Home help',
+            start: DateTime.now(),
+            minutes: _duration.minutes,
+            price: _duration.price,
+            originalPrice: _duration.originalPrice,
+            instant: true,
+            etaMinutes: _helper.etaMinutes,
+            expertName: _helper.isBest ? null : _helper.name,
+          ),
+        );
+    context.push(Routes.checkout);
+  }
 
   void _pickHelper(InstantHelper h) {
     setState(() {
@@ -148,8 +170,7 @@ class _InstantBodyState extends State<_InstantBody> {
           _ContinueBar(
             price: _duration.price,
             eta: _helper.etaMinutes,
-            // TODO(booking): confirm the address and continue to payment.
-            onTap: () => comingSoon(context, 'Booking'),
+            onTap: _continue,
           ),
         ],
       ),
