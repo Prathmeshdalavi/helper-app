@@ -346,12 +346,16 @@ class StatusBadge extends StatelessWidget {
     required this.color,
     this.iconColor = Colors.white,
     this.size = 96,
+    this.tilt = 0,
   });
 
   final IconData icon;
   final Color color;
   final Color iconColor;
   final double size;
+
+  /// Resting rotation in radians; the badge turns into it as it appears.
+  final double tilt;
 
   @override
   Widget build(BuildContext context) {

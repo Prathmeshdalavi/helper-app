@@ -20,7 +20,10 @@ import 'inclusions_sheet.dart';
 import 'instant_map.dart';
 import 'rating_sheet.dart';
 
-const _heroGreen = Color(0xFF2F7D55);
+const _heroGreen = Color(0xFF1FA463);
+const _heroGreenDeep = Color(0xFF0F7447);
+const _mint = Color(0xFF8CF2B0);
+const _mintInk = Color(0xFF0B5A36);
 const _amber = Color(0xFFC46A1B);
 const _gold = Color(0xFFF2B84B);
 
@@ -77,7 +80,7 @@ class _SheetLayout extends StatelessWidget {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: arrived ? SystemUiOverlayStyle.dark : SystemUiOverlayStyle.light,
       child: Scaffold(
-        backgroundColor: arrived ? const Color(0xFFEDECF3) : hero.color,
+        backgroundColor: Colors.white,
         body: Column(
           children: [
             AnimatedSwitcher(
@@ -163,6 +166,10 @@ class _HeroSpec {
     required this.icon,
     required this.title,
     required this.subtitle,
+    this.deep,
+    this.badge,
+    this.badgeInk = Colors.white,
+    this.tilt = 0,
   });
 
   final Color color;
@@ -170,11 +177,23 @@ class _HeroSpec {
   final String title;
   final String subtitle;
 
+  /// Bottom colour of the header gradient; darker than [color] by default.
+  final Color? deep;
+
+  /// Fill and tick colour of the status badge, and how far it is tilted.
+  final Color? badge;
+  final Color badgeInk;
+  final double tilt;
+
   static _HeroSpec of(Booking b) {
     switch (b.status) {
       case BookingStatus.confirmed:
         return _HeroSpec(
           color: _heroGreen,
+          deep: _heroGreenDeep,
+          badge: _mint,
+          badgeInk: _mintInk,
+          tilt: -0.2,
           icon: Icons.check_rounded,
           title: 'Booking confirmed',
           subtitle: b.draft.instant
@@ -184,6 +203,10 @@ class _HeroSpec {
       case BookingStatus.completed:
         return const _HeroSpec(
           color: _heroGreen,
+          deep: _heroGreenDeep,
+          badge: _mint,
+          badgeInk: _mintInk,
+          tilt: -0.2,
           icon: Icons.check_rounded,
           title: 'Service completed',
           subtitle: 'Thanks for choosing HerCare',
@@ -222,58 +245,103 @@ class _BadgeHero extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [spec.color, Color.lerp(spec.color, Colors.black, 0.18)!],
+          colors: [
+            spec.color,
+            spec.deep ?? Color.lerp(spec.color, Colors.black, 0.18)!,
+          ],
         ),
       ),
-      child: SafeArea(
-        bottom: false,
-        child: Column(
+      child: ClipRect(
+        child: Stack(
           children: [
-            PremiumTopBar(
-              title: '',
-              onDark: true,
-              onBack: () => _leave(context),
-              trailing: IconButton(
-                tooltip: 'Refresh',
-                onPressed: () {},
-                icon: const Icon(Icons.refresh_rounded, color: Colors.white),
+            // Soft rings add depth so a flat colour never looks pale.
+            Positioned(
+              right: -70,
+              top: -50,
+              child: _HeroRing(size: 230, alpha: 0.10),
+            ),
+            Positioned(
+              left: -80,
+              bottom: -60,
+              child: _HeroRing(size: 210, alpha: 0.08),
+            ),
+            SafeArea(
+              bottom: false,
+              child: Column(
+                children: [
+                  PremiumTopBar(
+                    title: '',
+                    onDark: true,
+                    onBack: () => _leave(context),
+                    trailing: IconButton(
+                      tooltip: 'Refresh',
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.refresh_rounded,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  StatusBadge(
+                    icon: spec.icon,
+                    color: spec.badge ?? Colors.white.withValues(alpha: 0.22),
+                    iconColor: spec.badgeInk,
+                    tilt: spec.tilt,
+                    size: 92,
+                  ),
+                  const SizedBox(height: 14),
+                  Text(
+                    spec.title,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 36),
+                    child: Text(
+                      spec.subtitle,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 14,
+                        height: 1.4,
+                        color: Colors.white.withValues(alpha: 0.85),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 50),
+                ],
               ),
             ),
-            const SizedBox(height: 4),
-            StatusBadge(
-              icon: spec.icon,
-              color: Colors.white.withValues(alpha: 0.22),
-              size: 84,
-            ),
-            const SizedBox(height: 14),
-            Text(
-              spec.title,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.w700,
-                color: Colors.white,
-              ),
-            ),
-            const SizedBox(height: 6),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 36),
-              child: Text(
-                spec.subtitle,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 14,
-                  height: 1.4,
-                  color: Colors.white.withValues(alpha: 0.85),
-                ),
-              ),
-            ),
-            const SizedBox(height: 50),
           ],
         ),
       ),
     );
   }
+}
+
+class _HeroRing extends StatelessWidget {
+  const _HeroRing({required this.size, required this.alpha});
+
+  final double size;
+  final double alpha;
+
+  @override
+  Widget build(BuildContext context) => Container(
+    width: size,
+    height: size,
+    decoration: BoxDecoration(
+      shape: BoxShape.circle,
+      border: Border.all(
+        color: Colors.white.withValues(alpha: alpha),
+        width: 28,
+      ),
+    ),
+  );
 }
 
 /// The street map with the customer's pin and the expert at the door.
