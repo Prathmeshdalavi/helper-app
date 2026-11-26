@@ -5,6 +5,7 @@ import 'package:material_ui/material_ui.dart';
 import '../../../app/app_theme.dart';
 import '../../../app/router/routes.dart';
 import '../../../core/utils/format.dart';
+import '../../../shared/widgets/extras.dart';
 import '../../../shared/widgets/motion.dart';
 import '../../../shared/widgets/ui.dart';
 import '../data/earnings_store.dart';
@@ -68,6 +69,7 @@ class _EarlyPayoutScreenState extends ConsumerState<EarlyPayoutScreen> {
           onPressed: () => context.push(Routes.payouts),
           child: const Text('History'),
         ),
+        const OvertimeButton(),
       ],
       bottom: linked
           ? FilledButton(
@@ -130,6 +132,28 @@ class _EarlyPayoutScreenState extends ConsumerState<EarlyPayoutScreen> {
             onChanged: (v) => setState(() => _amount = v.round()),
           ),
         ],
+        const TipsRow([
+          Tip(
+            Icons.bolt_rounded,
+            'How it works',
+            'Take part of what you have already earned before payday. It is deducted from your next payout.',
+          ),
+          Tip(
+            Icons.percent_rounded,
+            'Your limit',
+            'Up to 60% of the amount still waiting to be paid to you.',
+          ),
+          Tip(
+            Icons.account_balance_rounded,
+            'Where it goes',
+            'Only to the UPI ID or bank account in your own name.',
+          ),
+          Tip(
+            Icons.shield_rounded,
+            'Stay safe',
+            'HerCare will never ask for your PIN or OTP on a call.',
+          ),
+        ]),
       ],
     );
   }

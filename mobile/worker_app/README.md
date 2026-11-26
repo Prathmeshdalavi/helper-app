@@ -34,7 +34,7 @@ lib/
   features/<name>/{data,domain,presentation}
 ```
 
-Features: auth, onboarding, home, jobs, earnings, shifts, rewards, benefits,
+Features: auth, onboarding, home, jobs, earnings, shifts, rewards, shop, benefits,
 refer, updates, profile, support.
 
 ## Not built yet

@@ -6,6 +6,7 @@ import '../../../app/app_theme.dart';
 import '../../../app/router/routes.dart';
 import '../../../core/utils/clock.dart';
 import '../../../core/utils/format.dart';
+import '../../../shared/widgets/extras.dart';
 import '../../../shared/widgets/ui.dart';
 import '../data/shift_store.dart';
 
@@ -46,13 +47,16 @@ class AttendanceScreen extends ConsumerWidget {
     final first = DateTime(today.year, today.month);
     final days = DateTime(today.year, today.month + 1, 0).day;
     final leaveDays = {
-      for (final l in shift.leaves)
-        if (l.date.year == today.year && l.date.month == today.month)
-          l.date.day,
+      for (var d = 1; d <= days; d++)
+        if (shift.leaves.any(
+          (l) => l.covers(DateTime(today.year, today.month, d)),
+        ))
+          d,
     };
 
     return AppPage(
       title: 'Attendance and shift',
+      actions: const [OvertimeButton()],
       children: [
         AppCard(
           child: Column(

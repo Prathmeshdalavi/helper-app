@@ -3,15 +3,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/utils/clock.dart';
 
 class Leave {
-  const Leave({
+  Leave({
     required this.date,
+    DateTime? until,
     required this.reason,
     required this.approved,
-  });
+  }) : until = until ?? date;
 
+  /// First and last day, both included.
   final DateTime date;
+  final DateTime until;
   final String reason;
   final bool approved;
+
+  bool covers(DateTime day) => !day.isBefore(date) && !day.isAfter(until);
 }
 
 class ShiftState {
@@ -67,16 +72,27 @@ class ShiftNotifier extends Notifier<ShiftState> {
       state = state.copyWith(tomorrowPresent: present);
 
   /// Returns an error message, or null when the leave was added.
-  String? applyLeave(DateTime date, String reason) {
-    if (state.leaves.any((l) => l.date == date)) {
-      return 'You already have leave on that day';
+  String? applyLeave(DateTime from, DateTime to, String reason) {
+    if (to.isBefore(from)) return 'The end date is before the start date';
+    if (state.leaves.any(
+      (l) => !to.isBefore(l.date) && !from.isAfter(l.until),
+    )) {
+      return 'You already have leave on those days';
     }
-    if (reason == careLeaveReason && careLeaveUsed(date) >= careLeavePerMonth) {
-      return 'Period leave for that month is used';
+    if (reason == careLeaveReason) {
+      if (from != to) return 'Period leave is one day at a time';
+      if (careLeaveUsed(from) >= careLeavePerMonth) {
+        return 'Period leave for that month is used';
+      }
     }
     state = state.copyWith(
       leaves: [
-        Leave(date: date, reason: reason, approved: reason == careLeaveReason),
+        Leave(
+          date: from,
+          until: to,
+          reason: reason,
+          approved: reason == careLeaveReason,
+        ),
         ...state.leaves,
       ],
     );

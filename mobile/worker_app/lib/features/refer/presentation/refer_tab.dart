@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../../app/app_theme.dart';
+import '../../../core/utils/format.dart';
 import '../../../shared/widgets/art.dart';
 import '../../../shared/widgets/motion.dart';
 import '../../../shared/widgets/ui.dart';
@@ -80,6 +81,74 @@ class ReferTab extends ConsumerWidget {
                     ],
                   ),
                 ),
+                const SectionTitle('Top referrers near you'),
+
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+
+                  clipBehavior: Clip.none,
+
+                  child: Row(
+                    children: [
+                      // Made-up people for the demo.
+
+                      for (final (i, (name, area, amount)) in const [
+                        ('Asha', 'Manpada', 15000),
+
+                        ('Farida', 'Kolshet', 12500),
+
+                        ('Sunita', 'Waghbil', 10000),
+                      ].indexed)
+                        Padding(
+                          padding: const EdgeInsets.only(right: 12),
+
+                          child: SizedBox(
+                            width: 118,
+
+                            child: AppCard(
+                              padding: const EdgeInsets.all(12),
+
+                              child: Column(
+                                children: [
+                                  ExpertAvatar(
+                                    size: 48,
+                                    seed: i + 1,
+                                    label: '$name picture',
+                                  ),
+
+                                  const SizedBox(height: 6),
+
+                                  Text(
+                                    name,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+
+                                  Text(
+                                    area,
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: AppColors.textMuted,
+                                    ),
+                                  ),
+
+                                  Text(
+                                    rupees(amount),
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      color: AppColors.success,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+
                 const SectionTitle('How it works'),
                 const MenuCard(
                   children: [

@@ -117,6 +117,22 @@ class EarningsNotifier extends Notifier<EarningsState> {
     );
   }
 
+  /// Books a shop order against the next payout.
+  void addProductCost(int amount) {
+    final m = state.month;
+    state = state.copyWith(
+      month: MonthEarnings(
+        jobs: m.jobs,
+        incentives: m.incentives,
+        referral: m.referral,
+        tips: m.tips,
+        productCost: m.productCost + amount,
+        cashCollected: m.cashCollected,
+        earlyPayout: m.earlyPayout,
+      ),
+    );
+  }
+
   void linkAccount(String masked) =>
       state = state.copyWith(payoutAccount: masked);
 

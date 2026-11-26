@@ -8,9 +8,11 @@ import '../../../app/app_theme.dart';
 import '../../../app/router/routes.dart';
 import '../../../core/utils/clock.dart';
 import '../../../core/utils/format.dart';
+import '../../../shared/widgets/extras.dart';
 import '../../../shared/widgets/motion.dart';
 import '../../../shared/widgets/ui.dart';
 import '../../home/presentation/home_tab_provider.dart';
+import '../../jobs/data/work_store.dart';
 import '../data/earnings_store.dart';
 
 class EarningsTab extends ConsumerStatefulWidget {
@@ -35,11 +37,35 @@ class _EarningsTabState extends ConsumerState<EarningsTab> {
       bottom: false,
       child: Column(
         children: [
-          const PageHeader(title: 'Earnings'),
+          const PageHeader(title: 'Earnings', actions: [OvertimeButton()]),
           Expanded(
             child: ListView(
               padding: const EdgeInsets.fromLTRB(20, 6, 20, 28),
               children: [
+                if (ref.watch(workProvider.select((w) => w.online))) ...[
+                  const AppCard(
+                    color: AppColors.infoSoft,
+
+                    shadow: false,
+
+                    child: Row(
+                      children: [
+                        Icon(Icons.timelapse_rounded, color: AppColors.info),
+
+                        SizedBox(width: 12),
+
+                        Expanded(
+                          child: Text(
+                            'Shift in progress. Today is final after you go offline.',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: 12),
+                ],
+
                 Pager(
                   label: '${monthNames[shown.month - 1]} ${shown.year}',
                   onPrevious: _back < 3 ? () => setState(() => _back++) : null,
@@ -124,6 +150,44 @@ class _EarningsTabState extends ConsumerState<EarningsTab> {
                     ],
                   ),
                 ),
+                const SectionTitle('Rewards and warnings'),
+
+                MenuCard(
+                  children: [
+                    AppRow(
+                      icon: Icons.toll_rounded,
+
+                      title: 'Coins',
+
+                      subtitle: 'Early start, perfect job and streaks',
+
+                      color: AppColors.warning,
+
+                      fill: AppColors.warningSoft,
+
+                      onTap: () => context.push(Routes.coins),
+                    ),
+
+                    AppRow(
+                      icon: Icons.flag_rounded,
+
+                      title: 'Warnings this month',
+
+                      subtitle: 'Late arrival or a missed shift adds one',
+
+                      color: AppColors.success,
+
+                      fill: AppColors.successSoft,
+
+                      trailing: const Pill(
+                        '0',
+                        color: AppColors.success,
+                        fill: AppColors.successSoft,
+                      ),
+                    ),
+                  ],
+                ),
+
                 const SectionTitle('Quick actions'),
                 MenuCard(
                   children: [

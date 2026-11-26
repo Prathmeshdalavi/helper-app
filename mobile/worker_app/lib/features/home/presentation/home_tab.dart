@@ -31,7 +31,7 @@ class HomeTab extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final work = ref.watch(workProvider);
     final session = ref.watch(sessionProvider);
-    final coins = ref.watch(rewardsProvider.select((r) => r.coins));
+    final coins = ref.watch(rewardsProvider);
     final today = ref.watch(todayProvider);
 
     return SafeArea(
@@ -108,6 +108,60 @@ class HomeTab extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: 18),
+          Pressable(
+            label: 'Weekend bonus. Open updates',
+
+            onTap: () =>
+                ref.read(homeTabProvider.notifier).show(HomeTabId.updates),
+
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+
+              margin: const EdgeInsets.only(bottom: 14),
+
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [AppColors.lavenderDeep, AppColors.lavender],
+                ),
+
+                borderRadius: BorderRadius.circular(18),
+              ),
+
+              child: Row(
+                children: [
+                  Loop(
+                    duration: const Duration(milliseconds: 2400),
+
+                    builder: (context, t) => CoinIcon(size: 26, turn: t),
+                  ),
+
+                  const SizedBox(width: 12),
+
+                  const Expanded(
+                    child: Text(
+                      'Weekend bonus: ₹300 extra for 6 jobs',
+
+                      maxLines: 1,
+
+                      overflow: TextOverflow.ellipsis,
+
+                      style: TextStyle(
+                        color: AppColors.white,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 13.5,
+                      ),
+                    ),
+                  ),
+
+                  const Icon(
+                    Icons.chevron_right_rounded,
+                    color: AppColors.white,
+                  ),
+                ],
+              ),
+            ),
+          ),
+
           Reveal(
             index: 0,
             child: _StatusCard(work: work, onChanged: (v) => _toggle(ref, v)),

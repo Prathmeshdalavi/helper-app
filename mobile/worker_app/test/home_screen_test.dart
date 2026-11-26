@@ -69,7 +69,7 @@ void main() {
       Routes.home,
       container: signedInContainer(),
     );
-    final coins = c.read(rewardsProvider).coins;
+    final coins = c.read(rewardsProvider);
     final jobsPay = c.read(earningsProvider).month.jobs;
 
     await _goOnlineAndWaitForOffer(tester);
@@ -109,7 +109,7 @@ void main() {
     await pumpFor(tester, 1500);
 
     expect(find.text('Job completed'), findsOneWidget);
-    expect(c.read(rewardsProvider).coins, coins + 5);
+    expect(c.read(rewardsProvider), coins + 5);
     expect(c.read(earningsProvider).month.jobs, jobsPay + 210);
 
     await tester.scrollUntilVisible(

@@ -19,6 +19,7 @@ abstract final class Routes {
   static const emergencyLogout = '/emergency-logout';
   static const overtime = '/overtime';
   static const insurance = '/insurance/:kind';
+  static const hospitals = '/hospitals';
   static const coins = '/coins';
   static const store = '/store';
   static const training = '/training';

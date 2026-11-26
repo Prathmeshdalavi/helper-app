@@ -17,6 +17,8 @@ import '../../onboarding/data/kyc_store.dart';
 import '../../refer/data/refer_store.dart';
 import '../../rewards/data/rewards_store.dart';
 import '../../shifts/data/shift_store.dart';
+import '../../benefits/data/nominee_store.dart';
+import '../../shop/data/shop_store.dart';
 import '../../support/data/training_store.dart';
 
 class ProfileTab extends ConsumerWidget {
@@ -27,9 +29,7 @@ class ProfileTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final session = ref.watch(sessionProvider);
-    final level = ExpertLevel.forCoins(
-      ref.watch(rewardsProvider.select((r) => r.coins)),
-    );
+    final level = ExpertLevel.forCoins(ref.watch(rewardsProvider));
     final today = ref.watch(todayProvider);
     ref.watch(shiftProvider);
     final careUsed = ref.read(shiftProvider.notifier).careLeaveUsed(today);
@@ -170,6 +170,39 @@ class ProfileTab extends ConsumerWidget {
                   ),
                 ),
                 const SizedBox(height: 12),
+                AppCard(
+                  onTap: () => context.push(Routes.training),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
+                  child: const Row(
+                    children: [
+                      IconTile(Icons.rocket_launch_rounded),
+                      SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Grow with HerCare',
+                              style: TextStyle(fontWeight: FontWeight.w700),
+                            ),
+                            Text(
+                              'Short lessons that help you earn more',
+                              style: TextStyle(
+                                fontSize: 12.5,
+                                color: AppColors.textMuted,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Pill('Watch', icon: Icons.play_arrow_rounded),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 12),
                 const AlertCarousel(),
                 const SectionTitle('Earnings and payments'),
                 MenuCard(
@@ -186,7 +219,16 @@ class ProfileTab extends ConsumerWidget {
                       'Payout history',
                       Routes.payouts,
                     ),
-                    row(Icons.bolt_rounded, 'Early payout', Routes.earlyPayout),
+                    AppRow(
+                      icon: Icons.bolt_rounded,
+                      title: 'Early payout',
+                      trailing: const Pill(
+                        'New',
+                        color: AppColors.roseDeep,
+                        fill: AppColors.roseSoft,
+                      ),
+                      onTap: () => context.push(Routes.earlyPayout),
+                    ),
                     row(
                       Icons.table_chart_rounded,
                       'Rate card',
@@ -212,10 +254,12 @@ class ProfileTab extends ConsumerWidget {
                       'Overtime shifts',
                       Routes.overtime,
                     ),
-                    row(
-                      Icons.logout_rounded,
-                      'Emergency logout',
-                      Routes.emergencyLogout,
+                    AppRow(
+                      icon: Icons.logout_rounded,
+                      title: 'Emergency logout',
+                      color: AppColors.danger,
+                      fill: AppColors.dangerSoft,
+                      onTap: () => context.push(Routes.emergencyLogout),
                     ),
                   ],
                 ),
@@ -225,6 +269,11 @@ class ProfileTab extends ConsumerWidget {
                     AppRow(
                       icon: Icons.group_add_rounded,
                       title: 'Refer a friend',
+                      trailing: const Pill(
+                        'Earn more',
+                        color: AppColors.success,
+                        fill: AppColors.successSoft,
+                      ),
                       onTap: () => ref
                           .read(homeTabProvider.notifier)
                           .show(HomeTabId.refer),
@@ -239,11 +288,7 @@ class ProfileTab extends ConsumerWidget {
                       'Health insurance',
                       Routes.insuranceFor('health'),
                     ),
-                    row(
-                      Icons.storefront_rounded,
-                      'HerCare store',
-                      Routes.store,
-                    ),
+                    row(Icons.storefront_rounded, 'HerCare shop', Routes.store),
                     row(Icons.toll_rounded, 'My coins', Routes.coins),
                   ],
                 ),
@@ -273,6 +318,8 @@ class ProfileTab extends ConsumerWidget {
                     ref.invalidate(kycProvider);
                     ref.invalidate(shiftProvider);
                     ref.invalidate(rewardsProvider);
+                    ref.invalidate(ordersProvider);
+                    ref.invalidate(nomineeProvider);
                     ref.invalidate(earningsProvider);
                     ref.invalidate(referProvider);
                     ref.invalidate(trainingProvider);

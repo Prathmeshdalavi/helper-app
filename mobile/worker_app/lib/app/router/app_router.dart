@@ -7,6 +7,7 @@ import '../../features/auth/domain/auth_args.dart';
 import '../../features/auth/presentation/login_screen.dart';
 import '../../features/auth/presentation/otp_screen.dart';
 import '../../features/auth/presentation/splash_screen.dart';
+import '../../features/benefits/presentation/hospitals_screen.dart';
 import '../../features/benefits/presentation/insurance_screen.dart';
 import '../../features/earnings/presentation/bank_screen.dart';
 import '../../features/earnings/presentation/early_payout_screen.dart';
@@ -20,7 +21,7 @@ import '../../features/onboarding/presentation/profile_setup_screen.dart';
 import '../../features/profile/presentation/performance_screen.dart';
 import '../../features/rewards/presentation/coins_screen.dart';
 import '../../features/rewards/presentation/level_screen.dart';
-import '../../features/rewards/presentation/store_screen.dart';
+import '../../features/shop/presentation/shop_screen.dart';
 import '../../features/shifts/presentation/attendance_screen.dart';
 import '../../features/shifts/presentation/emergency_screen.dart';
 import '../../features/shifts/presentation/leave_screen.dart';
@@ -87,8 +88,9 @@ GoRouter buildRouter({
         Routes.insurance,
         (s) => InsuranceScreen(kind: s.pathParameters['kind']!),
       ),
+      page(Routes.hospitals, (_) => const HospitalsScreen()),
       page(Routes.coins, (_) => const CoinsScreen()),
-      page(Routes.store, (_) => const StoreScreen()),
+      page(Routes.store, (_) => const ShopScreen()),
       page(Routes.training, (_) => const TrainingScreen()),
       page(Routes.help, (_) => const HelpScreen()),
     ],
