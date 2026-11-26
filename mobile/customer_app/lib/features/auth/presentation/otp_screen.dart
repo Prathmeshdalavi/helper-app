@@ -132,7 +132,7 @@ class _OtpScreenState extends State<OtpScreen> {
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
-                      color: Color(0xFF6B6577),
+                      color: Color(0xFF5E5E5E),
                     ),
                   ),
                   const SizedBox(width: 6),
@@ -213,7 +213,7 @@ class _OtpScreenState extends State<OtpScreen> {
                   TextSpan(
                     style: const TextStyle(
                       fontSize: 13,
-                      color: Color(0xFF9A94A5),
+                      color: Color(0xFF7C7C7C),
                     ),
                     children: [
                       const TextSpan(text: 'Resend available in  '),
@@ -270,19 +270,19 @@ class _OtpBox extends StatelessWidget {
       height: 68,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: filled ? const Color(0xFFF8F4FF) : Colors.white,
+        color: filled ? const Color(0xFFFEF8F5) : Colors.white,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: active || error
               ? accent
               : filled
               ? AppColors.lavender.withValues(alpha: 0.35)
-              : const Color(0xFFE6E0F0),
+              : const Color(0xFFFCE8DD),
           width: active || error ? 1.8 : 1.2,
         ),
         boxShadow: [
           BoxShadow(
-            color: (active || error ? accent : const Color(0xFF8064C8))
+            color: (active || error ? accent : const Color(0xFFEA580C))
                 .withValues(alpha: active || error ? 0.22 : 0.07),
             blurRadius: active || error ? 14 : 10,
             offset: const Offset(0, 4),
@@ -294,7 +294,7 @@ class _OtpBox extends StatelessWidget {
         style: TextStyle(
           fontSize: filled ? 28 : 20,
           fontWeight: FontWeight.w700,
-          color: filled ? AppColors.deepPlum : const Color(0xFFB4AEC2),
+          color: filled ? AppColors.deepPlum : const Color(0xFFBDBDBD),
         ),
       ),
     );

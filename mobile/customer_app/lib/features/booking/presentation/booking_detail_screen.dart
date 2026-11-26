@@ -213,7 +213,7 @@ class _HeroSpec {
         );
       case BookingStatus.cancelled:
         return const _HeroSpec(
-          color: Color(0xFF6E6A7A),
+          color: Color(0xFF5E5E5E),
           icon: Icons.close_rounded,
           title: 'Booking cancelled',
           subtitle: 'Any amount paid is refunded to the source',
@@ -430,7 +430,7 @@ class _MapHeroState extends State<_MapHero>
                     height: 28,
                     alignment: Alignment.center,
                     decoration: const BoxDecoration(
-                      color: Color(0xFFEAE4F7),
+                      color: Color(0xFFFCE4D8),
                       shape: BoxShape.circle,
                     ),
                     child: Text(
@@ -807,7 +807,7 @@ class _ArrivalCard extends StatelessWidget {
         gradient: const LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [Color(0xFF8D70D2), Color(0xFF6C4FB3)],
+          colors: [Color(0xFF2E2E32), Color(0xFF18181B)],
         ),
         borderRadius: BorderRadius.circular(22),
       ),
@@ -1036,7 +1036,7 @@ class _RingPainter extends CustomPainter {
       Paint()
         ..style = PaintingStyle.stroke
         ..strokeWidth = stroke
-        ..color = const Color(0xFFEFEEF5),
+        ..color = const Color(0xFFFEF3EE),
     );
     canvas.drawArc(
       arc,
@@ -1072,7 +1072,7 @@ class _ExpertCard extends StatelessWidget {
             height: 52,
             alignment: Alignment.center,
             decoration: const BoxDecoration(
-              color: Color(0xFFEAE4F7),
+              color: Color(0xFFFCE4D8),
               shape: BoxShape.circle,
             ),
             child: Text(
@@ -1195,7 +1195,7 @@ class _RateCard extends ConsumerWidget {
                   height: 52,
                   alignment: Alignment.center,
                   decoration: const BoxDecoration(
-                    color: Color(0xFFEAE4F7),
+                    color: Color(0xFFFCE4D8),
                     shape: BoxShape.circle,
                   ),
                   child: Text(
@@ -1247,7 +1247,7 @@ class _RateCard extends ConsumerWidget {
                                   size: 28,
                                   color: i <= (booking.rating ?? 0)
                                       ? _gold
-                                      : const Color(0xFFE3E0EA),
+                                      : const Color(0xFFFCE9DF),
                                 ),
                               ),
                             ),
@@ -1271,7 +1271,7 @@ class _RateCard extends ConsumerWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
             decoration: const BoxDecoration(
-              color: Color(0xFFFBF3E2),
+              color: Color(0xFFFFF3E9),
               borderRadius: BorderRadius.vertical(bottom: Radius.circular(18)),
             ),
             child: Row(
@@ -1427,7 +1427,7 @@ class _TipsCarouselState extends State<_TipsCarousel> {
                 decoration: BoxDecoration(
                   color: i == _page
                       ? AppColors.lavender
-                      : const Color(0xFFDAD6E3),
+                      : const Color(0xFFFBE1D3),
                   borderRadius: BorderRadius.circular(3),
                 ),
               ),
@@ -1451,7 +1451,7 @@ class _ReferCard extends StatelessWidget {
         gradient: const LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [Color(0xFFF1EBFC), Color(0xFFE3D9F8)],
+          colors: [Color(0xFFFEF3EE), Color(0xFFFBE1D3)],
         ),
         borderRadius: BorderRadius.circular(20),
       ),

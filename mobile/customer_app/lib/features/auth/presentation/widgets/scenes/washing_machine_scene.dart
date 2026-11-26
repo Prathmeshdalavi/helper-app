@@ -2,7 +2,6 @@ import 'dart:math' as math;
 
 import 'package:material_ui/material_ui.dart';
 
-import '../../../../../app/app_theme.dart';
 import 'scene_kit.dart';
 
 class _Cloth {
@@ -175,7 +174,7 @@ class WashingMachinePainter extends ScenePainter {
         kc + d * 26,
         kc + d * 29.5,
         Paint()
-          ..color = AppColors.deepPlum.withValues(alpha: 0.28)
+          ..color = const Color(0xFF30283D).withValues(alpha: 0.28)
           ..strokeWidth = 1.6
           ..strokeCap = StrokeCap.round,
       );
@@ -195,7 +194,7 @@ class WashingMachinePainter extends ScenePainter {
       kc + kd * 4,
       kc + kd * 13,
       Paint()
-        ..color = AppColors.lavender
+        ..color = const Color(0xFF8063C4)
         ..strokeWidth = 3
         ..strokeCap = StrokeCap.round,
     );
@@ -265,7 +264,7 @@ class WashingMachinePainter extends ScenePainter {
         bc,
         21,
         Paint()
-          ..color = AppColors.lavender.withValues(alpha: 0.5 * f.a * pulse)
+          ..color = const Color(0xFF8063C4).withValues(alpha: 0.5 * f.a * pulse)
           ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 7),
       );
     }
@@ -287,7 +286,7 @@ class WashingMachinePainter extends ScenePainter {
     );
     final iconColor = Color.lerp(
       const Color(0xFF9A94AF),
-      AppColors.lavender,
+      const Color(0xFF8063C4),
       f.a,
     )!;
     final icon = Paint()

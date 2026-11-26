@@ -62,12 +62,12 @@ class _ServiceCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(_radius),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF30283D).withValues(alpha: 0.09),
+              color: const Color(0xFF0D0D0D).withValues(alpha: 0.09),
               blurRadius: 22,
               offset: const Offset(0, 8),
             ),
             BoxShadow(
-              color: const Color(0xFF30283D).withValues(alpha: 0.04),
+              color: const Color(0xFF0D0D0D).withValues(alpha: 0.04),
               blurRadius: 4,
               offset: const Offset(0, 1),
             ),
@@ -76,7 +76,7 @@ class _ServiceCard extends StatelessWidget {
         // A hairline so the white card still reads on a white page.
         foregroundDecoration: BoxDecoration(
           borderRadius: BorderRadius.circular(_radius),
-          border: Border.all(color: const Color(0x1430283D), width: 1),
+          border: Border.all(color: const Color(0x140D0D0D), width: 1),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -173,7 +173,7 @@ class _ServiceCard extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
                       fontSize: 12,
-                      color: Color(0xFF6B6577),
+                      color: Color(0xFF5E5E5E),
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -194,7 +194,7 @@ class _ServiceCard extends StatelessWidget {
                           '₹${c.originalPrice}',
                           style: const TextStyle(
                             fontSize: 12.5,
-                            color: Color(0xFF9A94A5),
+                            color: Color(0xFF7C7C7C),
                             decoration: TextDecoration.lineThrough,
                           ),
                         ),
@@ -250,7 +250,7 @@ class _ExploreRow extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: const Color(0xFFF6F3FB),
+          color: const Color(0xFFFEF8F5),
           borderRadius: BorderRadius.circular(22),
         ),
         child: Row(
@@ -269,7 +269,7 @@ class _ExploreRow extends StatelessWidget {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: const Color(0xFFF6F3FB),
+                            color: const Color(0xFFFEF8F5),
                             width: 2.5,
                           ),
                         ),
@@ -300,7 +300,7 @@ class _ExploreRow extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 12,
                       height: 1.3,
-                      color: Color(0xFF6B6577),
+                      color: Color(0xFF5E5E5E),
                     ),
                   ),
                 ],
@@ -354,7 +354,7 @@ class TrustRow extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 8),
         decoration: BoxDecoration(
-          color: const Color(0xFFF6F3FB),
+          color: const Color(0xFFFEF8F5),
           borderRadius: BorderRadius.circular(22),
         ),
         child: Column(
@@ -408,7 +408,7 @@ class HowItWorks extends StatelessWidget {
             style: const TextStyle(
               fontSize: 12,
               height: 1.3,
-              color: Color(0xFF6B6577),
+              color: Color(0xFF5E5E5E),
             ),
           ),
         ],
@@ -457,7 +457,7 @@ class BrandFooter extends StatelessWidget {
               fontSize: 11,
               letterSpacing: 1.4,
               fontWeight: FontWeight.w600,
-              color: Color(0xFFB4AEC2),
+              color: Color(0xFFBDBDBD),
             ),
           ),
         ],

@@ -5,7 +5,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:material_ui/material_ui.dart';
 
-import '../../../../app/app_theme.dart';
 import 'scenes/cleaning_scene.dart';
 import 'scenes/dishes_scene.dart';
 import 'scenes/pet_scene.dart';
@@ -201,8 +200,8 @@ class _HeroCarouselState extends State<HeroCarousel>
                         height: 7,
                         decoration: BoxDecoration(
                           color: i == _active
-                              ? AppColors.lavender
-                              : AppColors.lavender.withValues(alpha: 0.25),
+                              ? const Color(0xFF8063C4)
+                              : const Color(0xFF8063C4).withValues(alpha: 0.25),
                           borderRadius: BorderRadius.circular(4),
                         ),
                       ),

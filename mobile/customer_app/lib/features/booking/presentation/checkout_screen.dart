@@ -162,7 +162,7 @@ class _ServiceCard extends StatelessWidget {
                 rupees(draft.originalPrice),
                 style: const TextStyle(
                   fontSize: 12,
-                  color: Color(0xFF9B97A6),
+                  color: Color(0xFF7C7C7C),
                   decoration: TextDecoration.lineThrough,
                 ),
               ),
@@ -199,7 +199,7 @@ class _BillCard extends StatelessWidget {
     Widget dotted(String text) => Container(
       padding: const EdgeInsets.only(bottom: 1),
       decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(color: Color(0xFFC9C5D3), width: 1)),
+        border: Border(bottom: BorderSide(color: Color(0xFFFAD5C2), width: 1)),
       ),
       child: Text(text, style: const TextStyle(fontSize: 14)),
     );
@@ -230,7 +230,7 @@ class _BillCard extends StatelessWidget {
                           vertical: 2,
                         ),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFF1F0F6),
+                          color: const Color(0xFFFEF3EE),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
@@ -249,7 +249,7 @@ class _BillCard extends StatelessWidget {
                     '₹${bill.original.toStringAsFixed(2)}',
                     style: const TextStyle(
                       fontSize: 12.5,
-                      color: Color(0xFF9B97A6),
+                      color: Color(0xFF7C7C7C),
                       decoration: TextDecoration.lineThrough,
                     ),
                   ),

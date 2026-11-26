@@ -34,7 +34,7 @@ class FavouritesScreen extends ConsumerWidget {
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [Color(0xFF2A1F45), Color(0xFF3F2F6B)],
+                  colors: [Color(0xFF101010), Color(0xFF141414)],
                 ),
               ),
               child: SafeArea(

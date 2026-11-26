@@ -16,8 +16,8 @@ import '../data/wallet_store.dart';
 import 'edit_profile_sheet.dart';
 import 'saved_addresses_sheet.dart';
 
-const _gold = Color(0xFFB9852B);
-const _goldFill = Color(0xFFFBF3E2);
+const _gold = Color(0xFFBF7734);
+const _goldFill = Color(0xFFFFF3E9);
 
 /// "Profile": who you are, what you have, and where to manage it.
 class AccountTab extends ConsumerWidget {
@@ -135,7 +135,7 @@ class AccountTab extends ConsumerWidget {
                           'HerCare · version 0.1.0',
                           style: TextStyle(
                             fontSize: 12,
-                            color: Color(0xFFB4AEC2),
+                            color: Color(0xFFBDBDBD),
                           ),
                         ),
                       ],
@@ -179,9 +179,9 @@ class _Hero extends StatelessWidget {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    Color(0xFF9B80DE),
-                    Color(0xFF6C4FB3),
-                    Color(0xFF4F3892),
+                    Color(0xFFF5822E),
+                    Color(0xFFEA580C),
+                    Color(0xFFC2410C),
                   ],
                 ),
               ),
@@ -372,7 +372,7 @@ class _StatsCard extends StatelessWidget {
         border: Border.all(color: AppInk.hairline),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF2B2540).withValues(alpha: 0.1),
+            color: const Color(0xFF0E0E0E).withValues(alpha: 0.1),
             blurRadius: 28,
             offset: const Offset(0, 12),
           ),
@@ -493,7 +493,7 @@ class _FavouritesCard extends StatelessWidget {
               width: 48,
               height: 48,
               decoration: const BoxDecoration(
-                color: Color(0xFFF3E4BF),
+                color: Color(0xFFFFE4CB),
                 shape: BoxShape.circle,
               ),
               child: const Icon(Icons.favorite_rounded, color: _gold),
@@ -546,7 +546,7 @@ class _ReferCard extends StatelessWidget {
           gradient: const LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [Color(0xFFF1EBFC), Color(0xFFE3D9F8)],
+            colors: [Color(0xFFFEF3EE), Color(0xFFFBE1D3)],
           ),
           borderRadius: BorderRadius.circular(20),
         ),

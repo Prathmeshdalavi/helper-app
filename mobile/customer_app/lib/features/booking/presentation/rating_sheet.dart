@@ -114,7 +114,7 @@ class _RatingSheetState extends ConsumerState<_RatingSheet> {
                         child: Icon(
                           Icons.star_rounded,
                           size: 46,
-                          color: i <= _stars ? _gold : const Color(0xFFE3E0EA),
+                          color: i <= _stars ? _gold : const Color(0xFFFCE9DF),
                         ),
                       ),
                     ),
@@ -158,7 +158,7 @@ class _RatingSheetState extends ConsumerState<_RatingSheet> {
                         decoration: BoxDecoration(
                           color: _extra
                               ? const Color(0xFFFFF6DE)
-                              : const Color(0xFFF6F6FA),
+                              : const Color(0xFFFEF7F4),
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(
                             color: _extra ? _gold : AppInk.hairline,
@@ -195,7 +195,7 @@ class _RatingSheetState extends ConsumerState<_RatingSheet> {
             child: Container(
               padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
-                color: const Color(0xFFFBF3E2),
+                color: const Color(0xFFFFF3E9),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Row(
@@ -205,7 +205,7 @@ class _RatingSheetState extends ConsumerState<_RatingSheet> {
                     height: 44,
                     alignment: Alignment.center,
                     decoration: const BoxDecoration(
-                      color: Color(0xFFEAE4F7),
+                      color: Color(0xFFFCE4D8),
                       shape: BoxShape.circle,
                     ),
                     child: Text(
@@ -248,7 +248,7 @@ class _RatingSheetState extends ConsumerState<_RatingSheet> {
                       border: Border.all(
                         color: _favourite
                             ? AppColors.lavender
-                            : const Color(0xFFD5D1DD),
+                            : const Color(0xFFFBDECE),
                         width: 1.5,
                       ),
                     ),
@@ -305,7 +305,7 @@ class _InviteSheet extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [Color(0xFF8D70D2), Color(0xFF5E41A6)],
+          colors: [Color(0xFF2E2E32), Color(0xFF050505)],
         ),
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -391,7 +391,7 @@ class _InviteSheet extends StatelessWidget {
                   style: FilledButton.styleFrom(
                     minimumSize: const Size.fromHeight(50),
                     backgroundColor: Colors.white,
-                    foregroundColor: const Color(0xFF5E41A6),
+                    foregroundColor: const Color(0xFF141414),
                   ),
                   child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -430,7 +430,7 @@ class _PhonePair extends StatelessWidget {
           height: 168,
           padding: const EdgeInsets.all(5),
           decoration: BoxDecoration(
-            color: const Color(0xFF3B2C6B),
+            color: const Color(0xFF0F0F0F),
             borderRadius: BorderRadius.circular(20),
           ),
           child: Container(

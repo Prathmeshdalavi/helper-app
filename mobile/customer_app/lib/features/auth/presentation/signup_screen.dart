@@ -119,7 +119,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 14,
-                          color: Color(0xFF6B6577),
+                          color: Color(0xFF5E5E5E),
                         ),
                       ),
                       const SizedBox(height: 22),
@@ -237,14 +237,14 @@ class _SignupScreenState extends State<SignupScreen> {
                           Icon(
                             Icons.lock_outline_rounded,
                             size: 13,
-                            color: Color(0xFF9A94A5),
+                            color: Color(0xFF7C7C7C),
                           ),
                           SizedBox(width: 6),
                           Text(
                             'Your details are safe and never shared',
                             style: TextStyle(
                               fontSize: 12,
-                              color: Color(0xFF9A94A5),
+                              color: Color(0xFF7C7C7C),
                             ),
                           ),
                         ],
@@ -290,7 +290,7 @@ class _Steps extends StatelessWidget {
               'Your details',
               style: TextStyle(color: AppColors.lavender, fontSize: 11),
             ),
-            Text('Verify OTP', style: TextStyle(color: Color(0xFF9A94A5))),
+            Text('Verify OTP', style: TextStyle(color: Color(0xFF7C7C7C))),
           ],
         ),
       ].map((w) => DefaultTextStyle.merge(style: small, child: w)).toList(),
@@ -335,7 +335,7 @@ class _FormCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: const Color(0xFFEFEAF7)),
+        border: Border.all(color: const Color(0xFFFDF0E9)),
         boxShadow: [
           BoxShadow(
             color: AppColors.lavender.withValues(alpha: 0.10),
@@ -365,7 +365,7 @@ class _Label extends StatelessWidget {
         style: const TextStyle(
           fontSize: 13,
           fontWeight: FontWeight.w600,
-          color: Color(0xFF4B4458),
+          color: Color(0xFF4F4F4F),
         ),
       ),
     );
@@ -385,9 +385,9 @@ class _PhoneRow extends StatelessWidget {
       height: 54,
       padding: const EdgeInsets.symmetric(horizontal: 14),
       decoration: BoxDecoration(
-        color: const Color(0xFFF6F3FB),
+        color: const Color(0xFFFEF8F5),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: const Color(0xFFE6E0F0)),
+        border: Border.all(color: const Color(0xFFFCE8DD)),
       ),
       child: Row(
         children: [
@@ -439,7 +439,7 @@ class _TermsRow extends StatelessWidget {
               color: accepted ? AppColors.lavender : Colors.white,
               borderRadius: BorderRadius.circular(6),
               border: Border.all(
-                color: accepted ? AppColors.lavender : const Color(0xFFC9C3D6),
+                color: accepted ? AppColors.lavender : const Color(0xFFFAD5C2),
                 width: 1.5,
               ),
             ),
@@ -454,7 +454,7 @@ class _TermsRow extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 13,
                   height: 1.4,
-                  color: Color(0xFF6B6577),
+                  color: Color(0xFF5E5E5E),
                 ),
                 children: [
                   const TextSpan(text: 'I agree to the '),

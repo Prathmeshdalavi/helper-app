@@ -246,7 +246,7 @@ class _BalanceCard extends StatelessWidget {
         gradient: const LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [Color(0xFF9B80DE), Color(0xFF6C4FB3), Color(0xFF4F3892)],
+          colors: [Color(0xFF38383C), Color(0xFF18181B), Color(0xFF050505)],
         ),
         borderRadius: BorderRadius.circular(26),
         boxShadow: [
@@ -306,7 +306,7 @@ class _BalanceCard extends StatelessWidget {
             style: FilledButton.styleFrom(
               minimumSize: const Size.fromHeight(50),
               backgroundColor: Colors.white,
-              foregroundColor: const Color(0xFF5E41A6),
+              foregroundColor: const Color(0xFF141414),
             ),
             child: const Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -487,7 +487,7 @@ class _NoTransactions extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 36),
       child: Column(
         children: [
-          Icon(Icons.receipt_long_rounded, size: 52, color: Color(0xFFCFC8DE)),
+          Icon(Icons.receipt_long_rounded, size: 52, color: Color(0xFFF9D0BB)),
           SizedBox(height: 12),
           Text(
             'No transactions yet',
@@ -558,7 +558,7 @@ class _AddMoneyState extends State<_AddMoney> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             decoration: BoxDecoration(
-              color: const Color(0xFFF6F6FA),
+              color: const Color(0xFFFEF7F4),
               borderRadius: BorderRadius.circular(16),
             ),
             child: Row(

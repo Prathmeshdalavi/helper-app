@@ -127,14 +127,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 children: [
                   const Text(
                     'By proceeding, I accept the',
-                    style: TextStyle(fontSize: 12, color: Color(0xFF6B6577)),
+                    style: TextStyle(fontSize: 12, color: Color(0xFF5E5E5E)),
                   ),
                   const SizedBox(height: 2),
                   Text.rich(
                     TextSpan(
                       style: const TextStyle(
                         fontSize: 12,
-                        color: Color(0xFF6B6577),
+                        color: Color(0xFF5E5E5E),
                       ),
                       children: [
                         _link('Terms of use'),
@@ -167,7 +167,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: const Color(0xFFE3DFEA)),
+        border: Border.all(color: const Color(0xFFFCE9DF)),
       ),
       child: Row(
         children: [
@@ -188,7 +188,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               cursorColor: AppColors.lavender,
               decoration: const InputDecoration(
                 hintText: 'Enter mobile number',
-                hintStyle: TextStyle(color: Color(0xFF9A94A5)),
+                hintStyle: TextStyle(color: Color(0xFF7C7C7C)),
                 border: InputBorder.none,
                 isDense: true,
               ),
@@ -201,7 +201,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 width: 22,
                 height: 22,
                 decoration: const BoxDecoration(
-                  color: Color(0xFFE3E1E8),
+                  color: Color(0xFFFDECE3),
                   shape: BoxShape.circle,
                 ),
                 child: const Icon(Icons.close, size: 14, color: Colors.black54),
@@ -225,7 +225,7 @@ class _CountryBox extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: const Color(0xFFE3DFEA)),
+        border: Border.all(color: const Color(0xFFFCE9DF)),
       ),
       child: const FittedBox(
         fit: BoxFit.scaleDown,

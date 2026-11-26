@@ -96,7 +96,7 @@ class _PaymentOptionsScreenState extends ConsumerState<PaymentOptionsScreen> {
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: [Color(0xFF8D70D2), Color(0xFF6C4FB3)],
+                  colors: [Color(0xFF2E2E32), Color(0xFF18181B)],
                 ),
               ),
               child: SafeArea(
@@ -150,7 +150,7 @@ class _PaymentOptionsScreenState extends ConsumerState<PaymentOptionsScreen> {
                                     decoration: InputDecoration(
                                       hintText: 'Enter UPI ID, like name@bank',
                                       filled: true,
-                                      fillColor: const Color(0xFFF6F6FA),
+                                      fillColor: const Color(0xFFFEF7F4),
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
                                         borderSide: BorderSide.none,

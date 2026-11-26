@@ -154,9 +154,9 @@ class _Banner extends StatelessWidget {
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,
                   colors: [
-                    Color(0xCC1C1426),
-                    Color(0x661C1426),
-                    Color(0x001C1426),
+                    Color(0xCC090909),
+                    Color(0x66090909),
+                    Color(0x00090909),
                   ],
                   stops: [0, 0.55, 1],
                 ),

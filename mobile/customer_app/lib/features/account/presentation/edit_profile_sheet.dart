@@ -73,7 +73,7 @@ class _EditProfileState extends ConsumerState<_EditProfile> {
                   width: 36,
                   height: 36,
                   decoration: const BoxDecoration(
-                    color: Color(0xFFF1F0F6),
+                    color: Color(0xFFFEF3EE),
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(Icons.close_rounded, size: 18),
@@ -219,7 +219,7 @@ class _Label extends StatelessWidget {
           const SizedBox(width: 6),
           Text(
             '($hint)',
-            style: const TextStyle(fontSize: 12, color: Color(0xFFB4AEC2)),
+            style: const TextStyle(fontSize: 12, color: Color(0xFFBDBDBD)),
           ),
         ],
       ],
@@ -238,7 +238,7 @@ class _Box extends StatelessWidget {
   Widget build(BuildContext context) => Container(
     padding: const EdgeInsets.symmetric(horizontal: 14),
     decoration: BoxDecoration(
-      color: muted ? const Color(0xFFF6F6FA) : Colors.white,
+      color: muted ? const Color(0xFFFEF7F4) : Colors.white,
       borderRadius: BorderRadius.circular(14),
       border: Border.all(color: error ? premiumRed : AppInk.hairline),
     ),

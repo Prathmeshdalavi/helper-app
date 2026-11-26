@@ -10,7 +10,7 @@ import '../../home/presentation/home_tab_provider.dart';
 import '../../home/presentation/widgets/common.dart';
 import '../data/address_store.dart';
 
-const _gold = Color(0xFFB9852B);
+const _gold = Color(0xFFBF7734);
 
 /// Every expert who has visited, with a heart to favourite them.
 class ExpertsScreen extends ConsumerWidget {
@@ -76,7 +76,7 @@ class ExpertTile extends ConsumerWidget {
             height: 52,
             alignment: Alignment.center,
             decoration: const BoxDecoration(
-              color: Color(0xFFEAE4F7),
+              color: Color(0xFFFCE4D8),
               shape: BoxShape.circle,
             ),
             child: Text(

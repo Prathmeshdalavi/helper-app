@@ -72,7 +72,7 @@ class OffersTab extends StatelessWidget {
                   gradient: const LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [Color(0xFF8D70D2), Color(0xFF6C4FB3)],
+                    colors: [Color(0xFF2E2E32), Color(0xFF18181B)],
                   ),
                   borderRadius: BorderRadius.circular(20),
                 ),
@@ -108,7 +108,7 @@ class OffersTab extends StatelessWidget {
                       style: FilledButton.styleFrom(
                         minimumSize: const Size(0, 40),
                         backgroundColor: Colors.white,
-                        foregroundColor: const Color(0xFF5E41A6),
+                        foregroundColor: const Color(0xFF141414),
                         padding: const EdgeInsets.symmetric(horizontal: 18),
                       ),
                       child: const Text('Invite'),

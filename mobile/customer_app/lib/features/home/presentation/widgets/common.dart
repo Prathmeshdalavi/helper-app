@@ -125,7 +125,7 @@ class SectionTitle extends StatelessWidget {
 BoxDecoration cardDecoration({double radius = 22}) => BoxDecoration(
   color: Colors.white,
   borderRadius: BorderRadius.circular(radius),
-  border: Border.all(color: const Color(0xFFECE8F3)),
+  border: Border.all(color: const Color(0xFFFDF0E9)),
   boxShadow: [
     BoxShadow(
       color: AppColors.deepPlum.withValues(alpha: 0.05),

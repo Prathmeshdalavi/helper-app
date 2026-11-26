@@ -23,7 +23,7 @@ class PremiumScope extends StatelessWidget {
   );
 }
 
-const premiumSelectedFill = Color(0xFFF3EEFD);
+const premiumSelectedFill = Color(0xFFFEF3EE);
 const premiumGreen = Color(0xFF1E8E5A);
 const premiumGreenFill = Color(0xFFE7F6EE);
 const premiumRed = Color(0xFFD64550);
@@ -79,7 +79,7 @@ class AppCard extends StatelessWidget {
         border: Border.all(color: AppInk.hairline),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF2B2540).withValues(alpha: 0.04),
+            color: const Color(0xFF0E0E0E).withValues(alpha: 0.04),
             blurRadius: 18,
             offset: const Offset(0, 6),
           ),
@@ -188,7 +188,7 @@ class PrimaryButton extends StatelessWidget {
       style: FilledButton.styleFrom(
         minimumSize: Size.fromHeight(height),
         backgroundColor: color,
-        disabledBackgroundColor: const Color(0xFFE6E4EC),
+        disabledBackgroundColor: const Color(0xFFFDEDE4),
         disabledForegroundColor: Colors.white,
       ),
       child: Row(

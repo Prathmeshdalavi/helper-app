@@ -85,7 +85,7 @@ class _BottomBar extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(30),
-        border: Border.all(color: const Color(0xFFEFEAF7)),
+        border: Border.all(color: const Color(0xFFFDF0E9)),
         boxShadow: [
           BoxShadow(
             color: AppColors.lavender.withValues(alpha: 0.18),
@@ -122,7 +122,7 @@ class _BottomBar extends StatelessWidget {
                       size: 24,
                       color: i == index
                           ? AppColors.lavender
-                          : const Color(0xFF9A94A5),
+                          : const Color(0xFF7C7C7C),
                     ),
                     AnimatedSize(
                       duration: const Duration(milliseconds: 260),

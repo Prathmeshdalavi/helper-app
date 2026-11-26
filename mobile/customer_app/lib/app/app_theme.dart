@@ -2,18 +2,18 @@ import 'package:material_ui/material_ui.dart';
 
 /// HerCare brand colors. Use these instead of hard-coding hex values.
 abstract final class AppColors {
-  static const lavender = Color(0xFF8063C4);
-  static const softRose = Color(0xFFE7A0B4);
-  static const background = Color(0xFFF7F6FA);
-  static const deepPlum = Color(0xFF30283D);
+  static const lavender = Color(0xFFEA580C);
+  static const softRose = Color(0xFFFF9F45);
+  static const background = Color(0xFFFEFAF8);
+  static const deepPlum = Color(0xFF0D0D0D);
 }
 
 /// Neutral ink and line colours for the newer, flatter screens.
 abstract final class AppInk {
-  static const text = Color(0xFF1B1826);
-  static const muted = Color(0xFF6E6A7A);
-  static const hairline = Color(0xFFE3E1EA);
-  static const canvas = Color(0xFFF4F4F9);
+  static const text = Color(0xFF080808);
+  static const muted = Color(0xFF5E5E5E);
+  static const hairline = Color(0xFFFDECE3);
+  static const canvas = Color(0xFFFEFAF8);
 }
 
 abstract final class AppTheme {

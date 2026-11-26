@@ -61,10 +61,10 @@ class _AuthFieldState extends State<AuthField> {
       height: 54,
       padding: const EdgeInsets.symmetric(horizontal: 14),
       decoration: BoxDecoration(
-        color: focused ? Colors.white : const Color(0xFFFCFBFE),
+        color: focused ? Colors.white : const Color(0xFFFFFCFB),
         borderRadius: BorderRadius.circular(14),
         border: Border.all(
-          color: focused || widget.error ? accent : const Color(0xFFE6E0F0),
+          color: focused || widget.error ? accent : const Color(0xFFFCE8DD),
           width: focused || widget.error ? 1.6 : 1.2,
         ),
         boxShadow: focused || widget.error
@@ -82,7 +82,7 @@ class _AuthFieldState extends State<AuthField> {
           Icon(
             widget.icon,
             size: 20,
-            color: focused ? AppColors.lavender : const Color(0xFF9A94A5),
+            color: focused ? AppColors.lavender : const Color(0xFF7C7C7C),
           ),
           const SizedBox(width: 10),
           Expanded(
@@ -97,7 +97,7 @@ class _AuthFieldState extends State<AuthField> {
               style: const TextStyle(fontSize: 16),
               decoration: InputDecoration(
                 hintText: widget.hint,
-                hintStyle: const TextStyle(color: Color(0xFF9A94A5)),
+                hintStyle: const TextStyle(color: Color(0xFF7C7C7C)),
                 border: InputBorder.none,
                 isDense: true,
               ),

@@ -8,7 +8,7 @@ class AppPhoto extends StatelessWidget {
     super.key,
     this.alignment = Alignment.center,
     this.cacheWidth = 800,
-    this.fallback = const Color(0xFFEDE8F7),
+    this.fallback = const Color(0xFFFCEBE2),
   });
 
   final String asset;

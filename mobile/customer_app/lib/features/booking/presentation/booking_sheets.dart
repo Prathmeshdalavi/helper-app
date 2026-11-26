@@ -77,7 +77,7 @@ class _PaymentDetails extends StatelessWidget {
               '₹${bill.original.toStringAsFixed(2)}',
               style: const TextStyle(
                 fontSize: 12.5,
-                color: Color(0xFF9B97A6),
+                color: Color(0xFF7C7C7C),
                 decoration: TextDecoration.lineThrough,
               ),
             ),

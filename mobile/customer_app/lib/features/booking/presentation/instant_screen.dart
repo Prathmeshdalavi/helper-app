@@ -10,7 +10,7 @@ import '../data/demo_instant.dart';
 import '../domain/booking.dart';
 import 'instant_map.dart';
 
-const _selectedFill = Color(0xFFF3EEFD);
+const _selectedFill = Color(0xFFFEF3EE);
 const _ease = Curves.easeOutCubic;
 
 /// "Instant": the nearest helper, at your door in minutes.
@@ -109,7 +109,7 @@ class _InstantBodyState extends ConsumerState<_InstantBody> {
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFF2B2540).withValues(alpha: 0.08),
+                      color: const Color(0xFF0E0E0E).withValues(alpha: 0.08),
                       blurRadius: 22,
                       offset: const Offset(0, -6),
                     ),
@@ -338,7 +338,7 @@ class _HelperRow extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: h.isBest
                             ? AppColors.lavender
-                            : const Color(0xFFEAE4F7),
+                            : const Color(0xFFFCE4D8),
                         shape: BoxShape.circle,
                       ),
                       child: h.isBest
@@ -473,7 +473,7 @@ class _DurationCard extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
           decoration: BoxDecoration(
             color: !available
-                ? const Color(0xFFF8F8FB)
+                ? const Color(0xFFFEFAF8)
                 : (selected ? _selectedFill : Colors.white),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
@@ -516,7 +516,7 @@ class _DurationCard extends StatelessWidget {
                           '₹${duration.originalPrice}',
                           style: const TextStyle(
                             fontSize: 10.5,
-                            color: Color(0xFF9B97A6),
+                            color: Color(0xFF7C7C7C),
                             decoration: TextDecoration.lineThrough,
                           ),
                         ),

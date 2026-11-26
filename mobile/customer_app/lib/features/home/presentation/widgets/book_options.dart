@@ -52,14 +52,14 @@ class _HomeSearchState extends State<HomeSearch> {
         height: 52,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         decoration: BoxDecoration(
-          color: const Color(0xFFF4F2F8),
+          color: const Color(0xFFFEF7F3),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Row(
           children: [
             const Icon(
               Icons.search_rounded,
-              color: Color(0xFF6B6577),
+              color: Color(0xFF5E5E5E),
               size: 22,
             ),
             const SizedBox(width: 12),
@@ -85,7 +85,7 @@ class _HomeSearchState extends State<HomeSearch> {
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
                       fontSize: 15,
-                      color: Color(0xFF8A8497),
+                      color: Color(0xFF7C7C7C),
                     ),
                   ),
                 ),
@@ -222,7 +222,7 @@ class _OptionCard extends StatelessWidget {
                 const Icon(
                   Icons.chevron_right_rounded,
                   size: 20,
-                  color: Color(0xFF6B6577),
+                  color: Color(0xFF5E5E5E),
                 ),
               ],
             ),
@@ -231,7 +231,7 @@ class _OptionCard extends StatelessWidget {
               subtitle,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 12, color: Color(0xFF6B6577)),
+              style: const TextStyle(fontSize: 12, color: Color(0xFF5E5E5E)),
             ),
           ],
         ),

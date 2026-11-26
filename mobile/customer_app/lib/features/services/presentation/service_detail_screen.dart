@@ -167,7 +167,7 @@ class _Body extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               category.tagline,
-              style: const TextStyle(fontSize: 13, color: Color(0xFF6B6577)),
+              style: const TextStyle(fontSize: 13, color: Color(0xFF5E5E5E)),
             ),
             const SizedBox(height: 14),
             Wrap(
@@ -196,7 +196,7 @@ class _Body extends StatelessWidget {
                       '(${detail.reviewCount} reviews)',
                       style: const TextStyle(
                         fontSize: 12,
-                        color: Color(0xFF6B6577),
+                        color: Color(0xFF5E5E5E),
                       ),
                     ),
                   ],
@@ -207,14 +207,14 @@ class _Body extends StatelessWidget {
                     const Icon(
                       Icons.schedule_rounded,
                       size: 16,
-                      color: Color(0xFF6B6577),
+                      color: Color(0xFF5E5E5E),
                     ),
                     const SizedBox(width: 4),
                     Text(
                       detail.duration,
                       style: const TextStyle(
                         fontSize: 12,
-                        color: Color(0xFF6B6577),
+                        color: Color(0xFF5E5E5E),
                       ),
                     ),
                   ],
@@ -225,7 +225,7 @@ class _Body extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
               decoration: BoxDecoration(
-                color: const Color(0xFFF6F3FB),
+                color: const Color(0xFFFEF8F5),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Row(
@@ -242,7 +242,7 @@ class _Body extends StatelessWidget {
                     '₹${category.originalPrice}',
                     style: const TextStyle(
                       fontSize: 13,
-                      color: Color(0xFF9A94A5),
+                      color: Color(0xFF7C7C7C),
                       decoration: TextDecoration.lineThrough,
                     ),
                   ),
@@ -270,7 +270,7 @@ class _Body extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 13.5,
                 height: 1.5,
-                color: Color(0xFF4A4457),
+                color: Color(0xFF4F4F4F),
               ),
             ),
             const SizedBox(height: 26),
@@ -326,7 +326,7 @@ class _CheckRow extends StatelessWidget {
           Icon(
             included ? Icons.check_circle_rounded : Icons.remove_circle_outline,
             size: 20,
-            color: included ? AppColors.lavender : const Color(0xFFB4AEC2),
+            color: included ? AppColors.lavender : const Color(0xFFBDBDBD),
           ),
           const SizedBox(width: 10),
           Expanded(
@@ -335,7 +335,7 @@ class _CheckRow extends StatelessWidget {
               style: TextStyle(
                 fontSize: 13.5,
                 height: 1.3,
-                color: included ? AppColors.deepPlum : const Color(0xFF6B6577),
+                color: included ? AppColors.deepPlum : const Color(0xFF5E5E5E),
               ),
             ),
           ),
@@ -377,7 +377,7 @@ class _ReviewCard extends StatelessWidget {
                   size: 15,
                   color: i < review.rating
                       ? const Color(0xFFF2B84B)
-                      : const Color(0xFFE3DFEA),
+                      : const Color(0xFFFCE9DF),
                 ),
             ],
           ),
@@ -387,13 +387,13 @@ class _ReviewCard extends StatelessWidget {
             style: const TextStyle(
               fontSize: 12.5,
               height: 1.4,
-              color: Color(0xFF4A4457),
+              color: Color(0xFF4F4F4F),
             ),
           ),
           const SizedBox(height: 6),
           Text(
             review.when,
-            style: const TextStyle(fontSize: 11, color: Color(0xFF9A94A5)),
+            style: const TextStyle(fontSize: 11, color: Color(0xFF7C7C7C)),
           ),
         ],
       ),
@@ -429,7 +429,7 @@ class _BookBar extends ConsumerWidget {
             children: [
               const Text(
                 'Starting at',
-                style: TextStyle(fontSize: 11, color: Color(0xFF6B6577)),
+                style: TextStyle(fontSize: 11, color: Color(0xFF5E5E5E)),
               ),
               Text(
                 '₹${category.price}',

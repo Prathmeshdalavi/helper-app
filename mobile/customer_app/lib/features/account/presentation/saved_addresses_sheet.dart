@@ -353,7 +353,7 @@ class _Field extends StatelessWidget {
       decoration: InputDecoration(
         labelText: label,
         filled: true,
-        fillColor: const Color(0xFFF6F6FA),
+        fillColor: const Color(0xFFFEF7F4),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
           borderSide: BorderSide.none,

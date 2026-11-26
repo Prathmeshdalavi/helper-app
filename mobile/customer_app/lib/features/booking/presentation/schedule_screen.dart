@@ -9,7 +9,7 @@ import '../data/booking_store.dart';
 import '../data/demo_schedule.dart';
 import '../domain/booking.dart';
 
-const _selectedFill = Color(0xFFF3EEFD);
+const _selectedFill = Color(0xFFFEF3EE);
 const _surcharge = Color(0xFFE8782B);
 const _ease = Curves.easeOutCubic;
 
@@ -137,7 +137,7 @@ class _ScheduleBodyState extends ConsumerState<_ScheduleBody> {
                       borderRadius: BorderRadius.circular(20),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xFF2B2540)
+                          color: const Color(0xFF0E0E0E)
                               .withValues(alpha: 0.06),
                           blurRadius: 28,
                           offset: const Offset(0, 10),
@@ -358,7 +358,7 @@ class _InfoBanner extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
       decoration: BoxDecoration(
-        color: const Color(0xFFE9E8F4),
+        color: const Color(0xFFFDEEE7),
         borderRadius: BorderRadius.circular(14),
       ),
       child: Row(
@@ -454,7 +454,7 @@ class _DurationRow extends StatelessWidget {
                         '₹${d.originalPrice}',
                         style: const TextStyle(
                           fontSize: 10.5,
-                          color: Color(0xFF9B97A6),
+                          color: Color(0xFF7C7C7C),
                           decoration: TextDecoration.lineThrough,
                         ),
                       ),
@@ -509,7 +509,7 @@ class _TimePicker extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Container(
-                  color: const Color(0xFFF6F6FA),
+                  color: const Color(0xFFFEF7F4),
                   padding: const EdgeInsets.fromLTRB(14, 10, 14, 10),
                   child: const Text(
                     'Standard slots',
@@ -817,7 +817,7 @@ class _CartBar extends StatelessWidget {
         onPressed: ready ? onTap : null,
         style: FilledButton.styleFrom(
           minimumSize: const Size.fromHeight(48),
-          disabledBackgroundColor: const Color(0xFFE6E4EC),
+          disabledBackgroundColor: const Color(0xFFFDEDE4),
           disabledForegroundColor: Colors.white,
         ),
         child: AnimatedSwitcher(

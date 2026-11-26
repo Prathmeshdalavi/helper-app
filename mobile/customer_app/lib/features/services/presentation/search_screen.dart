@@ -100,7 +100,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                         height: 48,
                         padding: const EdgeInsets.symmetric(horizontal: 14),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFF4F2F8),
+                          color: const Color(0xFFFEF7F3),
                           borderRadius: BorderRadius.circular(16),
                         ),
                         child: Row(
@@ -273,7 +273,7 @@ class _NoResults extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.search_off_rounded, size: 52, color: Color(0xFFCFC8DE)),
+            Icon(Icons.search_off_rounded, size: 52, color: Color(0xFFF9D0BB)),
             SizedBox(height: 12),
             Text(
               'No services found',

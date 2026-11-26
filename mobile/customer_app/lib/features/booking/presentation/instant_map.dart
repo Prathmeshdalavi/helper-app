@@ -125,7 +125,7 @@ class StreetsPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     canvas.drawRect(
       Offset.zero & size,
-      Paint()..color = const Color(0xFFEDECF3),
+      Paint()..color = const Color(0xFFFEF3EE),
     );
 
     // Water along the top left.
@@ -148,7 +148,7 @@ class StreetsPainter extends CustomPainter {
     canvas.drawPath(water, Paint()..color = const Color(0xFFDADCEB));
 
     // Blocks.
-    final block = Paint()..color = const Color(0xFFE5E4EE);
+    final block = Paint()..color = const Color(0xFFFDEEE7);
     final rnd = math.Random(7);
     const cols = 7;
     const rows = 5;

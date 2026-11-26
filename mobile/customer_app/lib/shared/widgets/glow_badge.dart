@@ -65,7 +65,7 @@ class _GlowBadgeState extends State<GlowBadge>
                   gradient: const LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [Color(0xFFB39BEE), AppColors.lavender],
+                    colors: [Color(0xFFF29768), AppColors.lavender],
                   ),
                   boxShadow: [
                     BoxShadow(

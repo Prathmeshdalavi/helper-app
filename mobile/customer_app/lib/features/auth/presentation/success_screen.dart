@@ -121,7 +121,7 @@ class _SuccessScreenState extends ConsumerState<SuccessScreen> {
               const Text(
                 'Add your address to see helpers near you.',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 13, color: Color(0xFF6B6577)),
+                style: TextStyle(fontSize: 13, color: Color(0xFF5E5E5E)),
               ),
               const SizedBox(height: 28),
               Container(
