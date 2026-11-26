@@ -25,7 +25,7 @@ class LevelScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final coins = ref.watch(rewardsProvider.select((r) => r.coins));
+    final coins = ref.watch(rewardsProvider);
     final level = ExpertLevel.forCoins(coins);
     final next = level.next;
     final progress = next == null

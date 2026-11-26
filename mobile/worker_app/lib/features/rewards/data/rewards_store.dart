@@ -1,64 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class StoreItem {
-  const StoreItem(
-    this.id,
-    this.name,
-    this.price,
-    this.iconCode, {
-    this.soldOut = false,
-  });
-
-  final String id;
-  final String name;
-  final int price;
-
-  /// Which picture to draw for the item.
-  final String iconCode;
-  final bool soldOut;
-}
-
-/// TODO(rewards): load the catalogue from the backend.
-const storeItems = <StoreItem>[
-  StoreItem('bottle', 'Steel water bottle', 20, 'bottle'),
-  StoreItem('bag', 'Work tote bag', 30, 'bag'),
-  StoreItem('umbrella', 'Folding umbrella', 45, 'umbrella'),
-  StoreItem('apron', 'Pocket apron', 25, 'apron', soldOut: true),
-  StoreItem('shoes', 'Comfort shoes', 120, 'shoes'),
-  StoreItem('tiffin', 'Lunch box set', 60, 'tiffin', soldOut: true),
-];
-
-class RewardsState {
-  const RewardsState({this.coins = 42, this.redeemed = const {}});
-
-  /// Coins available to spend.
-  final int coins;
-  final Set<String> redeemed;
-}
-
-class RewardsNotifier extends Notifier<RewardsState> {
+/// Coins earned. They set the expert's level and are never spent.
+class RewardsNotifier extends Notifier<int> {
   @override
-  RewardsState build() => const RewardsState();
+  int build() => 42;
 
-  void add(int coins) => state = RewardsState(
-    coins: state.coins + coins,
-    redeemed: state.redeemed,
-  );
-
-  bool redeem(StoreItem item) {
-    if (item.soldOut ||
-        state.redeemed.contains(item.id) ||
-        state.coins < item.price) {
-      return false;
-    }
-    state = RewardsState(
-      coins: state.coins - item.price,
-      redeemed: {...state.redeemed, item.id},
-    );
-    return true;
-  }
+  void add(int coins) => state += coins;
 }
 
-final rewardsProvider = NotifierProvider<RewardsNotifier, RewardsState>(
+final rewardsProvider = NotifierProvider<RewardsNotifier, int>(
   RewardsNotifier.new,
 );
