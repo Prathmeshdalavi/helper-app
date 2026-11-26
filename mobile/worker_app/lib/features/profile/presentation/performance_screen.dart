@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_ui/material_ui.dart';
@@ -6,9 +8,10 @@ import '../../../app/app_theme.dart';
 import '../../../app/router/routes.dart';
 import '../../../core/utils/clock.dart';
 import '../../../core/utils/format.dart';
+import '../../../shared/widgets/extras.dart';
 import '../../../shared/widgets/ui.dart';
+import '../data/ratings.dart';
 
-/// TODO(ratings): load from GET /experts/me/ratings.
 class PerformanceScreen extends ConsumerStatefulWidget {
   const PerformanceScreen({super.key});
 
@@ -17,66 +20,58 @@ class PerformanceScreen extends ConsumerStatefulWidget {
 }
 
 class _PerformanceScreenState extends ConsumerState<PerformanceScreen> {
-  static const _ratings = [4.8, 4.7, 4.6, 4.7];
-  static const _breakdown = [
-    ('On time', 0.96),
-    ('Work quality', 0.93),
-    ('Behaviour', 0.99),
-    ('Uniform and hygiene', 0.88),
-  ];
-  static const _feedback = [
-    ('Meera', 5, 'Very neat work, the kitchen looks new.'),
-    ('Sana', 5, 'Polite and on time. Please send her again.'),
-    ('Ritu', 4, 'Good work. Came ten minutes late.'),
-  ];
-
   int _back = 0;
 
   @override
   Widget build(BuildContext context) {
     final today = ref.watch(todayProvider);
     final month = DateTime(today.year, today.month - _back);
+    final rating = monthRatings[_back];
+    final most = rating.counts.fold(1, math.max);
+    const title = TextStyle(fontSize: 17, fontWeight: FontWeight.w700);
     return AppPage(
       title: 'Performance',
+      actions: const [OvertimeButton()],
       bottom: FilledButton(
         onPressed: () => context.push(Routes.training),
         child: const Text('Improve with training'),
       ),
       children: [
-        Pager(
-          label: '${monthNames[month.month - 1]} ${month.year}',
-          onPrevious: _back < _ratings.length - 1
-              ? () => setState(() => _back++)
-              : null,
-          onNext: _back > 0 ? () => setState(() => _back--) : null,
-        ),
-        const SizedBox(height: 14),
         AppCard(
-          color: AppColors.warningSoft,
-          shadow: false,
           child: Column(
             children: [
-              Text(
-                '${_ratings[_back]}',
-                style: const TextStyle(
-                  fontSize: 52,
-                  fontWeight: FontWeight.w700,
+              Pager(
+                label: '${monthNames[month.month - 1]} ${month.year}',
+                onPrevious: _back < monthRatings.length - 1
+                    ? () => setState(() => _back++)
+                    : null,
+                onNext: _back > 0 ? () => setState(() => _back--) : null,
+              ),
+              const SizedBox(height: 12),
+              TweenAnimationBuilder<double>(
+                key: ValueKey(_back),
+                tween: Tween(begin: 0, end: rating.average),
+                duration: const Duration(milliseconds: 800),
+                curve: Curves.easeOutCubic,
+                builder: (context, v, _) => Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      v.toStringAsFixed(1),
+                      style: const TextStyle(
+                        fontSize: 48,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    const Icon(
+                      Icons.star_rounded,
+                      size: 44,
+                      color: AppColors.gold,
+                    ),
+                  ],
                 ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  for (var i = 1; i <= 5; i++)
-                    Icon(
-                      i <= _ratings[_back].round()
-                          ? Icons.star_rounded
-                          : Icons.star_outline_rounded,
-                      color: AppColors.gold,
-                      size: 28,
-                    ),
-                ],
-              ),
-              const SizedBox(height: 4),
               const Text(
                 'Monthly rating',
                 style: TextStyle(color: AppColors.textMuted),
@@ -84,86 +79,111 @@ class _PerformanceScreenState extends ConsumerState<PerformanceScreen> {
             ],
           ),
         ),
-        const SectionTitle('Breakdown'),
+        const SizedBox(height: 14),
         AppCard(
           child: Column(
             children: [
-              for (final (name, base) in _breakdown)
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 9),
-                  child: Builder(
-                    builder: (context) {
-                      final score = base - _back * 0.02;
-                      return Column(
-                        children: [
-                          Row(
-                            children: [
-                              Expanded(child: Text(name)),
-                              Text(
-                                '${(score * 100).round()}%',
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ],
+              const Text('Ratings breakdown', style: title),
+              Text(
+                'Based on ${rating.rated} rated jobs',
+                style: const TextStyle(color: AppColors.textMuted),
+              ),
+              const SizedBox(height: 10),
+              for (var i = 0; i < 5; i++)
+                Semantics(
+                  label: '${5 - i} stars: ${rating.counts[i]} jobs',
+                  excludeSemantics: true,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 6),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.star_rounded,
+                          size: 17,
+                          color: AppColors.gold,
+                        ),
+                        SizedBox(
+                          width: 22,
+                          child: Text(
+                            ' ${5 - i}',
+                            style: const TextStyle(fontWeight: FontWeight.w700),
                           ),
-                          const SizedBox(height: 6),
-                          TweenAnimationBuilder<double>(
-                            tween: Tween(begin: 0, end: score),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: TweenAnimationBuilder<double>(
+                            tween: Tween(
+                              begin: 0,
+                              end: rating.counts[i] / most,
+                            ),
                             duration: const Duration(milliseconds: 800),
                             curve: Curves.easeOutCubic,
                             builder: (context, v, _) => LinearProgressIndicator(
                               value: v,
                               minHeight: 8,
-                              semanticsLabel: name,
                               borderRadius: BorderRadius.circular(4),
                               backgroundColor: AppColors.softLavender,
-                              color: score >= 0.9
-                                  ? AppColors.success
-                                  : AppColors.gold,
+                              color: AppColors.lavender,
                             ),
                           ),
-                        ],
-                      );
-                    },
+                        ),
+                        SizedBox(
+                          width: 32,
+                          child: Text(
+                            '${rating.counts[i]}',
+                            textAlign: TextAlign.right,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
             ],
           ),
         ),
-        const SectionTitle('What customers said'),
-        for (final (name, stars, text) in _feedback)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 10),
-            child: AppCard(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          name,
-                          style: const TextStyle(fontWeight: FontWeight.w700),
-                        ),
+        const SizedBox(height: 14),
+        AppCard(
+          color: AppColors.successSoft,
+          shadow: false,
+          child: SizedBox(
+            width: double.infinity,
+            child: Column(
+              children: [
+                const Text('Customers loved', style: title),
+                const SizedBox(height: 10),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  alignment: WrapAlignment.center,
+                  children: [
+                    for (final tag in rating.loved)
+                      Pill(
+                        tag,
+                        icon: Icons.favorite_rounded,
+                        color: AppColors.success,
+                        fill: AppColors.card,
                       ),
-                      const Icon(
-                        Icons.star_rounded,
-                        size: 18,
-                        color: AppColors.gold,
-                      ),
-                      Text(' $stars'),
-                    ],
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    text,
-                    style: const TextStyle(color: AppColors.textMuted),
-                  ),
-                ],
-              ),
+                  ],
+                ),
+              ],
             ),
           ),
+        ),
+        const SizedBox(height: 14),
+        AppCard(
+          color: AppColors.warningSoft,
+          shadow: false,
+          child: SizedBox(
+            width: double.infinity,
+            child: Column(
+              children: [
+                const Text('How to get even better', style: title),
+                const SizedBox(height: 8),
+                Text(rating.advice, textAlign: TextAlign.center),
+              ],
+            ),
+          ),
+        ),
       ],
     );
   }
