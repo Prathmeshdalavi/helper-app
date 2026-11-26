@@ -1,5 +1,5 @@
 name: worker_app
-description: "HerCare worker app (demo)."
+description: "HerExpert: the HerCare worker app (demo)."
 publish_to: 'none'
 version: 0.1.0+1
 
@@ -9,6 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_riverpod: ^3.5.0
+  go_router: ^18.1.4
   material_ui: ^1.11.1
 
 dev_dependencies:
@@ -18,3 +20,16 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  fonts:
+    # Figtree (SIL Open Font License, see assets/fonts/Figtree-OFL.txt).
+    - family: Figtree
+      fonts:
+        - asset: assets/fonts/Figtree.ttf
+          weight: 400
+        - asset: assets/fonts/Figtree.ttf
+          weight: 500
+        - asset: assets/fonts/Figtree.ttf
+          weight: 600
+        - asset: assets/fonts/Figtree.ttf
+          weight: 700

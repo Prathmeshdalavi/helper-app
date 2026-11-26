@@ -1,22 +1,11 @@
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_ui/material_ui.dart';
 
-import 'screens/home_screen.dart';
-import 'theme/app_theme.dart';
+import 'app/app.dart';
 
 void main() {
-  runApp(const WorkerApp());
-}
-
-class WorkerApp extends StatelessWidget {
-  const WorkerApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'HerCare Worker',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.light(),
-      home: const HomeScreen(),
-    );
-  }
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  runApp(const ProviderScope(child: WorkerApp()));
 }
